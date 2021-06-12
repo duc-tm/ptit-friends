@@ -1,0 +1,13 @@
+<div>
+    <input type="text" id="message-input">
+    <button onclick="sendMessage()">Send</button>
+</div>
+{{#section 'script'}}
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io(); 
+        socket.on('server-message', (message) => {
+            console.log(message)
+        })
+    </script>
+{{/section}}
