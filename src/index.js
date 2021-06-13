@@ -36,7 +36,7 @@ route(app);
 ioServer.on('connection', (socket) => {
     console.log(`connect ${socket.id}`);
 
-    socket.on('disconnect', () => { 
+    socket.on('disconnect', () => {
         console.log(`disconnect ${socket.id}`);
     });
     socket.on('client-message', (message) => {
