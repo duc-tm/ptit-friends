@@ -1,7 +1,7 @@
 class User {
-    constructor({ userId, fName, age, gender, major, address }) {
-        this.userId = userId;
-        this.fName = fName;
+    constructor({ userid, fname, age, gender, major, address }) {
+        this.userId = userid;
+        this.fName = fname;
         this.age = age;
         this.gender = gender;
         this.major = major;

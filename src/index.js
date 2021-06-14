@@ -5,6 +5,7 @@ const app = express();
 const httpServer = require('http').createServer(app);
 const ioServer = require('socket.io')(httpServer);
 const morgan = require('morgan')
+const session = require('express-session');
 const ehbs = require('express-handlebars');
 const route = require('./routes');
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,16 @@ app.use(express.urlencoded({
 app.use(express.json());
 
 app.use(morgan('combined'));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'ptit-friends-secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        sameSite: true,
+        maxAge: 60*60*1000
+    }
+}));
 
 app.engine('hbs', ehbs({
     extname: 'hbs',

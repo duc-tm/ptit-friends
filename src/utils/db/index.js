@@ -9,7 +9,7 @@ module.exports = {
         try {
             const result = await pool.query(queryString, params);
             const duration = Date.now() - start;
-            console.log('executed query', { queryString, duration, rows: result.rowCount });
+            console.log('Executed query', { queryString, duration, rows: result.rowCount });
             return result;
         } catch (error) {
             throw error;
