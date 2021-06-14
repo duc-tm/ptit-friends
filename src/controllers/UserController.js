@@ -1,6 +1,7 @@
-const db = require('../config/db');
-const queryString = require('../config/db/queryString');
+const db = require('../utils/db');
+const queryString = require('../utils/db/queryString');
 const userModel = require('../models/UserModel');
+const { hash, compareHash } = require('../utils/bcrypt');
 
 class UserController {
     async register(req, res) {
@@ -16,7 +17,8 @@ class UserController {
                     return res.json({ email: 'Email is already exist' });
             }
 
-            await db.query(queryString.create.user, [username, password, email]);
+            const hashedPassword = await hash(password);
+            await db.query(queryString.create.user, [username, hashedPassword, email]);
 
             res.status(201).json({ msg: 'Register successful!' });
         } catch (error) {
@@ -33,10 +35,9 @@ class UserController {
 
             if (result.rowCount > 0) {
                 const { password: userPassword } = result.rows[0];
-                if (password === userPassword) {
-                    const user = new userModel(result.rows[0]);
-                    return res.status(200).render('messagebox', user);
-                }
+                const isMatch = await compareHash(password, userPassword);
+                if(isMatch)
+                    return res.render('home');
             }
 
             res.json({ msg: 'Incorrect username or password!' });
