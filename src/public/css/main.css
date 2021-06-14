@@ -1,0 +1,256 @@
+.app {
+    background-color: rgba(0, 0, 0, 0.2);
+    height: 100vh;
+}
+/* Header */
+.header {
+}
+
+.header__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header__logo {
+    cursor: pointer;
+}
+
+.login-btn {
+    width: 12rem;
+    height: 3.6rem;
+    background-color: var(--primary-color);
+    text-transform: uppercase;
+    color: white;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    box-shadow: 4px 4px 4px grey;
+    transition: all 0.1s;
+    cursor: pointer;
+}
+
+.login-btn:active {
+    transform: translateY(2px);
+    box-shadow: 2px 2px 2px grey;
+}
+
+/* Main */
+.main {
+}
+
+.main__img {
+    height: 80vh;
+    width: 100%;
+    object-fit: cover;
+}
+
+.new-message {
+    position: absolute;
+    background-color: #000000d8;
+    width: 92.2rem;
+    height: 25.8rem;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%);
+    border-radius: 50px;
+}
+
+.new-message__header {
+    font-size: 4.4rem;
+    font-weight: 500;
+    color: white;
+    text-align: center;
+    margin-bottom: 3.2rem;
+    margin-top: 5.8rem;
+}
+
+.new-message__description {
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: white;
+    text-align: center;
+    margin-bottom: 3.2rem;
+}
+
+.signup-btn {
+    width: 22.9rem;
+    height: 5.5rem;
+    color: black;
+    font-size: 2rem;
+    font-weight: 500;
+    border: none;
+    background-image: linear-gradient(to right, #ef0000, #ff6b00);
+    border-radius: 50px;
+    display: block;
+    margin: auto;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.signup-btn:active {
+    transform: translateY(2px);
+}
+
+/* Footer */
+.footer {
+    margin-top: 2rem;
+}
+
+.footer__containter {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.footer__contact span {
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin-left: 2rem;
+    margin-right: 1rem;
+}
+
+.footer__contact__icon {
+    color: rgba(0, 2, 0, 0.7);
+    font-size: 2.3rem;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+.footer__contact__fb:hover {
+    color: #0b84ee;
+}
+
+.footer__contact__tt:hover {
+    color: #00b6f1;
+}
+
+.footer__contact__ins:hover {
+    color: #da245e;
+}
+
+.footer__auth {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+/* Modal */
+.modal {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000000d2;
+    position: fixed;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.login {
+    height: 46.4rem;
+    width: 50rem;
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: white;
+    padding: 3rem 5rem;
+    border-radius: 2px;
+    animation: fadeIn 0.2s ease-in;
+}
+
+.login__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.login__header-text {
+    font-size: 2.4rem;
+    color: black;
+    font-weight: 600;
+    margin-left: 1rem;
+}
+
+.login__header-signup {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.login__input-username {
+    width: 100%;
+    height: 4.2rem;
+    margin-top: 5rem;
+    margin-bottom: 1.6rem;
+    padding: 1.5rem;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 1.4rem;
+    border: solid 2px gray;
+    border-radius: 4px;
+}
+
+.login__input-password {
+    width: 100%;
+    height: 4.2rem;
+    padding: 1.5rem;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 1.4rem;
+    border: solid 2px gray;
+    border-radius: 4px;
+    margin-bottom: 1.6rem;
+}
+
+.login__forgot {
+    font-weight: 500;
+    font-size: 1.4rem;
+    text-decoration: none;
+    color: var(--primary-color);
+    float: right;
+}
+.login__button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 11.5rem;
+}
+.login__exit-btn {
+    height: 3.4rem;
+    width: 11.8rem;
+    border: none;
+    font-weight: 500;
+    font-size: 1.4rem;
+    border-radius: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.login__acc-btn {
+    height: 3.4rem;
+    width: 11.8rem;
+    margin-left: 0.5rem;
+    border: none;
+    background-color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1.4rem;
+    color: white;
+    border-radius: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0.2;
+    }
+    100% {
+        opacity: 1;
+    }
+}

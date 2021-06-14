@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="main">
+        <img src="./img/handtogether.png" alt="" class="main__img">
+        <div class="new-message">
+            <h2 class="new-message__header">
+                Tìm Bạn Mọi Lúc! Kết Bạn Mọi Nơi!
+            </h2>
+            <p class="new-message__description">
+                Tham gia vào cộng đồng của chúng tôi
+            </p>
+            <button class="signup-btn">Tạo Tài Khoản</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__containter grid">
+            <div class="footer__contact">
+                <span>Liên hệ:</span>
+                <a href=""><i class="fab fa-facebook-square footer__contact__icon footer__contact__fb"></i></a>
+                <a href=""><i class="fab fa-twitter-square footer__contact__icon footer__contact__tt"></i></a>
+                <a href=""><i class="fab fa-instagram footer__contact__icon footer__contact__ins"></i></a>
+            </div>
+
+            <div class="footer__auth">
+                <span>Copyright © by Team03</span>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal hidden"></div>
+    <div class="login hidden">
+        <div class="login__header">
+            <h2 class="login__header-text">Đăng nhập</h2>
+            <h3 class="login__header-signup">Đăng ký</h3>
+        </div>
+        <input type="username" id="login__username" placeholder="Tài khoản của bạn" class="login__input-username">
+        <input type="password" id="login__password" placeholder="Mật khẩu" class="login__input-password">
+        <a href="" class="login__forgot">Quên mật khẩu?</a>
+        <div class="login__button-container">
+            <button class="login__exit-btn">Trở lại</button>
+            <button class="login__acc-btn" onclick="login()">Đăng nhập</button>
+        </div>
+    </div>
+</div>
+
+{{#section 'script'}}
+<script src="./js/welcome.js"></script>
+{{/section}}

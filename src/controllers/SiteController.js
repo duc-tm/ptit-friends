@@ -3,7 +3,12 @@ class SiteController {
 
     // [GET] /
     displayHomePage(req, res) {
-        res.send('Home page')
+        res.render('home')
+    }
+
+    // [GET] /welcome
+    displayWelcomePage(req, res) {
+        res.render('welcome');
     }
 }
 

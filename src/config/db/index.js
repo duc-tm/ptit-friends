@@ -4,13 +4,21 @@ const pool = new Pool({
 });
 
 module.exports = {
-    query: (queryString, params, callback) => {
+    query: async (queryString, params) => {
         const start = Date.now();
-        return pool.query(queryString, params, (error, res) => {
+        try {
+            const result = await pool.query(queryString, params);
             const duration = Date.now() - start;
-            console.log('executed query', { queryString, duration, rows: res.rowCount });
-            callback(error, res);
+            console.log(result)
+            console.log('executed query', { queryString, duration, rows: result.rowCount });
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    },
+    getClient: (callback) => {
+        pool.connect((error, client, done) => {
+            callback(error, client, done);
         });
     },
-
 }
