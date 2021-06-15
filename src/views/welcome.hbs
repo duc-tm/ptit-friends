@@ -63,6 +63,25 @@
         <button class="login__acc-btn" onclick="login()">Đăng nhập</button>
     </div>
 </div>
+<div class="register hidden">
+    <div class="register__header">
+        <h2 class="register__header-text">Đăng ký</h2>
+        <h3 class="register__header-login">Đăng nhập</h3>
+    </div>
+    <form action="" id="register__form">
+        <input type="text" placeholder="Tên tài khoản" id="register__username" class="register__input-name">
+        <input type="email" placeholder="Email của bạn" id="register__email" class="register__input-email">
+        <input type="password" placeholder="Mật khẩu" id="register__password" class="register__input-password">
+        <input type="password" placeholder="Nhập lại mật khẩu" id="register__password-confirm" class="register__input-password">
+        <input type="checkbox" id="agreeWithPolicy">
+        <label for="agreeWithPolicy"><span class="register__policy">Đồng ý với điều khoản và chính sách bảo
+                mật</span></label>
+    </form>
+    <div class="register__button-container">
+        <button class="register__exit-btn">Trở lại</button>
+        <button class="register__acc-btn" onclick="register()">Đăng ký</button>
+    </div>
+</div>
 
 {{#section 'script'}}
 <script src="/js/welcome.js"></script>

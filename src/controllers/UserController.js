@@ -7,7 +7,7 @@ const { hash, compareHash } = require('../utils/bcrypt');
 class UserController {
     async register(req, res) {
         const { username, password, email } = req.body;
-
+        console.log(req.body)
         try {
             const result = await db.query(`${queryString.read.byUserName} OR email = $2`, [username, email]);
 
