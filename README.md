@@ -1,6 +1,9 @@
 # ptit-friends
 
 1. Setup env
+  Create .env file in root folder (folder contain "package.json")
+  Copy + paste below content to .env file:
+  
   PGHOST = localhost
   PGUSER = <postgresql_account>
   PGPASSWORD = <postgresql_password>
