@@ -1,0 +1,60 @@
+create table users (
+	userId bigserial primary key not null,
+	fName varchar(255),
+	age smallint,
+	gender varchar(255)
+);
+
+create table normalusers (
+	userId bigserial not null,
+	major text,
+	address text,
+	foreign key (userId) references users(userId) on delete cascade
+);
+
+create table accounts (
+	userId bigserial not null,
+	username varchar(255) not null,
+	password text not null,
+	userRole boolean,
+	foreign key (userId) references users(userId) on delete cascade
+);
+
+create table chatconnections (
+	user1Id bigserial not null,
+	user2Id bigserial not null,
+	connectionState boolean not null,
+	connectionType boolean not null,
+	foreign key (user1Id) references users(userId) on delete cascade,
+	foreign key (user2Id) references users(userId) on delete cascade,
+	primary key (user1Id, user2Id)
+);
+
+create table messageboxes (
+	messageBoxId bigserial not null primary key,
+	user1Id bigserial not null,
+	user2Id bigserial not null,
+	foreign key (user1Id) references users(userId) on delete cascade,
+	foreign key (user2Id) references users(userId) on delete cascade
+);
+
+create table messages (
+	messageId bigserial primary key not null,
+ 	messageboxid bigserial not null,
+	userid bigserial not null,
+ 	messagecontent text not null,
+ 	createdat timestamp default current_timestamp,
+	foreign key (messageboxid) references messageboxes(messageboxid) on delete cascade,
+	foreign key (userid) references users(userid)
+);
+
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");
