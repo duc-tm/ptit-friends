@@ -4,6 +4,7 @@ const pool = new Pool({
 });
 
 module.exports = {
+    pool,
     query: async (queryString, params) => {
         const start = Date.now();
         try {
@@ -20,4 +21,13 @@ module.exports = {
             callback(error, client, done);
         });
     },
+    genQueryIn: (paramsLength, queryString) => {
+        queryString += '(';
+        let i = 1;
+        for(i; i < paramsLength; i++) {
+            queryString += `$${i}, `;
+        }
+        queryString += `$${i})`
+        return queryString;
+    }
 }

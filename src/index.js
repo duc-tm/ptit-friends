@@ -1,14 +1,17 @@
 require('dotenv').config();
 const path = require('path');
-const express = require('express')
+const express = require('express');
 const app = express();
 const httpServer = require('http').createServer(app);
 const ioServer = require('socket.io')(httpServer);
-const morgan = require('morgan')
+const socketListener = require('./utils/socket');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const ehbs = require('express-handlebars');
 const route = require('./routes');
 const PORT = process.env.PORT || 3000;
+const db = require('./utils/db');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -19,13 +22,19 @@ app.use(express.json());
 
 app.use(morgan('combined'));
 
+app.use(cookieParser());
+
 app.use(session({
     secret: process.env.SESSION_SECRET || 'ptit-friends-secret',
+    store: new (require('connect-pg-simple')(session))({
+        pool: db.pool,
+        tableName: 'session'
+    }),
     resave: false,
     saveUninitialized: false,
     cookie: {
         sameSite: true,
-        maxAge: 60*60*1000
+        maxAge: 60 * 60 * 1000
     }
 }));
 
@@ -44,15 +53,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 route(app);
 
-ioServer.on('connection', (socket) => {
-    console.log(`connect ${socket.id}`);
-
-    socket.on('disconnect', () => {
-        console.log(`disconnect ${socket.id}`);
-    });
-    socket.on('client-message', (message) => {
-    })
-});
+socketListener(ioServer);
 
 httpServer.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`)

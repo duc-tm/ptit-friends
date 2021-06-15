@@ -205,6 +205,10 @@
     margin-bottom: 1.6rem;
 }
 
+.login__message {
+    display: none;
+}
+
 .login__forgot {
     font-weight: 500;
     font-size: 1.4rem;

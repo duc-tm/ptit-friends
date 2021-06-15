@@ -1,10 +1,10 @@
 const bcryptjs = require('bcryptjs');
-const HASHING_ROUND = Number(process.env.HASHING_ROUND) || 12;
+const SALT_LENGTH = Number(process.env.SALT_LENGTH) || 12;
 
 module.exports = {
     hash: async (payload) => {
         try {
-            const hashedPayload = await bcryptjs.hash(payload, HASHING_ROUND);
+            const hashedPayload = await bcryptjs.hash(payload, SALT_LENGTH);
             return hashedPayload;
         } catch (error) {
             throw error;

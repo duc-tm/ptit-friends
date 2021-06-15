@@ -38,13 +38,15 @@ class UserController {
                 const account = new accountModel(result.rows[0]);
                 const user = new userModel(result.rows[0]);
                 const isMatch = await compareHash(password, account.password);
+
                 if (isMatch) {
-                    req.session.user = { userId: user.userid, fName: user.fname };
-                    return res.render('home');
+                    req.session.user = { userId: user.userId, fName: user.fName };
+                    res.cookie('userId', user.userId)
+                    return res.status(200).json({ redirectPath: '/' });
                 }
             }
 
-            res.json({ msg: 'Incorrect username or password!' });
+            res.status(401).json({ msg: 'Incorrect username or password!' });
         } catch (error) {
             console.log(error);
             return res.status(503).json({ msg: 'Server got some error. Please try again later.' });
@@ -53,7 +55,7 @@ class UserController {
 
     async logout(req, res) {
         req.session.destroy((error) => {
-            if(error) 
+            if (error)
                 return res.status(503).json({ msg: 'Server got some error. Please try again later.' });
             res.redirect('/');
         });

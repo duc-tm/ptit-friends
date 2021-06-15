@@ -12,14 +12,18 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="./css/base.css" />
-    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/common.css" />
+    {{{_sections.stylesheet}}}
 </head>
 
 <body>
     <div class="app">
-        {{> header }}
+        {{#if renderHeaderPartial}}
+            {{> header}}
+        {{/if}}
         {{{body}}}
     </div>
+    <script src="/js/index.js"></script>
     {{{_sections.script}}}
 </body>
 

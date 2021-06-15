@@ -1,7 +1,8 @@
-const loginBtn = document.querySelector(".login-btn");
-const modal = document.querySelector('.modal');
-const loginForm = document.querySelector('.login');
-const loginExitBtn = document.querySelector('.login__exit-btn');
+const modal = $('.modal');
+const loginBtn = $(".login-btn");
+const loginForm = $('.login');
+const loginExitBtn = $('.login__exit-btn');
+const messageContainerEle = $('.login__message');
 
 loginBtn.addEventListener("click", () => {
     modal.classList.remove('hidden');
@@ -11,16 +12,19 @@ loginBtn.addEventListener("click", () => {
 loginExitBtn.addEventListener('click', () => {
     modal.classList.add('hidden');
     loginForm.classList.add('hidden');
+    toggleErrorMessage(messageContainerEle, '', 'error-msg', false);
 });
 
 modal.addEventListener('click', () => {
     modal.classList.add('hidden');
     loginForm.classList.add('hidden');
+    toggleErrorMessage(messageContainerEle, '', 'error-msg', false);
+
 });
 
 async function login() {
-    const username = document.querySelector('#login__username').value;
-    const password = document.querySelector('#login__password').value;
+    const username = $('#login__username').value;
+    const password = $('#login__password').value;
 
     const res = await fetch('http://localhost:3000/user/login', {
         method: 'POST',
@@ -29,8 +33,16 @@ async function login() {
         },
         body: JSON.stringify({ username, password })
     });
-    // html = await res.text()
-    // document.querySelector('html').innerHTML = html;
-    const url = window.location.toString();
-    window.location = url.replace('welcome', '')
+
+    const resData = await res.json()
+    if(resData.msg) {
+        toggleErrorMessage(messageContainerEle, resData.msg, 'error-msg', true);
+        return;
+    }
+    window.location.pathname = resData.redirectPath;
+}
+
+function toggleErrorMessage(msgContainer, msg, htmlClass, toggleState) {
+    msgContainer.innerText = msg;
+    msgContainer.classList.toggle(htmlClass, toggleState);
 }

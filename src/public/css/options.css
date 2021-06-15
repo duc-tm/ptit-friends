@@ -1,0 +1,51 @@
+.header__container {
+    position: relative;
+}
+.options-container{
+    width: 24rem;
+    background-color: white;
+    position: absolute;
+    top: 85%;
+    right: 0;
+    z-index: 1000;
+    border-radius: 5px;
+    box-shadow: 2px 3px 3px gray;
+    overflow: hidden;
+}
+
+.options-list {
+    list-style: none;
+}
+
+.options-item {
+    height: 6.4rem;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+    border-radius: 5px;
+}
+
+.options-item:hover {
+    background-color: rgba(128, 128, 128, 0.3);
+    cursor: pointer;
+}
+
+.options-item-icon{
+    font-size: 2.8rem;
+}
+
+.options-item span {
+    display: block;
+    margin-left: 1.5rem;
+
+}
+
+.options-item:nth-child(2) span{
+    margin-left: 2rem;
+}
+
+.hidden {
+    display: none;
+}

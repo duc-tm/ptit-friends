@@ -1,8 +1,9 @@
 module.exports = {
     isLogedIn: (req, res, next) => {
-        if(req.session.user) {
-            return next();
+        const user = req.session.user;
+        if (user) {
+            if (user.userId) return next();
         }
-        res.render('welcome');
+        res.render('welcome', { renderHeaderPartial: false });
     }
 }
