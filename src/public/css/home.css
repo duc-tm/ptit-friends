@@ -1,0 +1,423 @@
+
+/* Main */
+
+.main {
+    background: radial-gradient(#e66465, #9198e5);
+    height: calc(100vh - 8.8rem);
+    padding: 8rem;
+}
+
+.main__header {
+    margin: 0;
+    font-size: 3rem;
+    font-weight: 600;
+    color: #5A5F5E;
+    padding: 0;
+    margin: auto;
+    width: fit-content;
+    margin-bottom: 10rem;
+}
+
+.main__button {
+    width: 34.4rem;
+    height: 34.4rem;
+    border-radius: 100%;
+    background-color: #FFF971;
+    display: flex;
+    margin: auto;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.main__button:hover {
+    transform: scale(1.2);
+}
+
+.main__button:active {
+    transform: scale(1.1);
+}
+
+.main__button-img-container {
+    width: 24rem;
+    height: 24rem;
+    border-radius: 100%;
+    background-color: #FBF9D3;
+    display: flex;
+    margin: auto;
+    align-items: center;
+    position: relative;
+}
+
+.main__button-img {
+    width: 20rem;
+    height: 20rem;
+    border-radius: 100%;
+    filter: opacity(0.2);
+    margin-left: 2.5rem;
+}
+
+
+.main__button-text {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%);
+    font-size: 2.4rem;
+    text-align: center;
+    line-height: 3.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+
+/* Form criteria select */
+.criteria-form {
+    position: fixed;
+    width: 55rem;
+    z-index: 100;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: white;
+    border-radius: 5px;
+    overflow:hidden ;
+}
+
+.criteria-form__header {
+    height: 4.5rem;
+    width: 100%;
+    background-color: #52586B;
+    font-size: 1.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color:white;
+    text-align: center;
+    line-height: 4.5rem;
+}
+
+.criteria-header {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.criteria-form__hobbies {
+    padding: 3.4rem 3.4rem 2.5rem 3.4rem;
+}
+
+.criteria-form__hobbies__list {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    transition: all 0.1;
+}
+
+.criteria-form__hobbies__item {
+    width: 20%;
+    background-color: #C4C4C4;
+    margin: 1.5rem 10% 0rem 0;
+    text-align: center;
+    padding: 0.6rem;
+    font-size: 1.4rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.criteria-form__hobbies__item--active {
+    background-color: #3F51ED;
+    color: white;
+}
+
+.criteria-form__major {
+    padding: 2.5rem 3.4rem;
+}
+
+.criteria-form__major__list {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    transition: all 0.1;
+}
+
+.criteria-form__major__item {
+    width: 20%;
+    background-color: #C4C4C4;
+    margin: 1.5rem 10% 0rem 0;
+    text-align: center;
+    padding: 0.6rem;
+    font-size: 1.4rem;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.criteria-form__major__item--active {
+    background-color: #3F51ED;
+    color: white;
+}
+
+.criteria-form__age {
+    display: flex;
+    padding: 2.5rem 3.4rem;
+    align-items: center;
+}
+
+.criteria-form__age-header {
+    width: 7rem;
+}
+
+#criteria-age{
+    font-size: 1.5rem;
+    outline: none;
+    padding: 0.2rem 3rem 0.2rem 0;
+    border:1px solid #C4C4C4;
+    margin-left: 1.5rem;
+    cursor: pointer;
+}
+
+.criteria-form__gender {
+    display: flex;
+    padding: 2.5rem 3.4rem;
+    align-items: center;
+    margin-top: -2rem;
+}
+
+.criteria-form__gender-header {
+    width: 7rem;
+}
+
+#criteria-gender{
+    font-size: 1.5rem;
+    outline: none;
+    padding: 0.2rem 3rem 0.2rem 0;
+    border:1px solid #C4C4C4;
+    margin-left: 1.5rem;
+    cursor: pointer;
+}
+
+.criteria-form__btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.criteria-form__btn {
+    width: 12rem;
+    height: 4rem;
+    border-radius: 2rem;
+    border:none;
+    outline: none;
+    font-size: 1.6rem;
+    font-weight: 500;
+    transition: all 0.1s;
+    cursor: pointer;
+}
+
+.criteria-form__btn:hover {
+    transform: scale(1.1);
+}
+
+.criteria-form__btn:active {
+    transform: scale(1);
+}
+
+.criteria-form__btn-exit {
+    margin-right: 5rem;
+}
+
+.criteria-form__btn-find {
+    background-color: red;
+    color: white;
+}
+
+/* Form send request */
+.connect-send-form {
+    position: fixed;
+    width: 120rem;
+    z-index: 100;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%);
+    height: 72rem;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    overflow:hidden ;
+}
+
+.connect-send__select {
+    width: 34.6rem;
+    border-right: 2px solid #dfdfdf;
+}
+
+.connect-send__select__back {
+    display: flex;
+    align-items: center;
+    height: 6rem;
+    padding: 1.5rem;
+    width: fit-content;
+}
+
+.connect-send__select__back p {
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.back-icon {
+    font-size: 1.8rem;
+    margin-right: .5rem;
+}
+
+.connect-send__main {
+    background-color: #f1f1f1;
+    height: 92%;
+}
+
+.connect-send__container{
+    padding: 3rem 1rem;
+}
+
+.connect-send__list {
+    list-style: none;
+    padding: 0;
+    overflow-y: scroll;
+    height: 58rem;
+}
+
+.connect-send__list::-webkit-scrollbar{
+    width: 0;
+}
+
+.connect-send__item {
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    padding: 1.5rem;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.connect-send__item:hover, .connect-send__item--active {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
+.connect-send__img {
+    width: 5.8rem;
+    height: 5.8rem;
+    border-radius: 100%;
+    margin-right: 1.5rem;
+}
+
+.connect-send__name {
+    font-size: 1.6rem;
+    font-weight: 500;
+    padding-bottom: 0.7rem;
+}
+
+.connect-send__gender {
+    font-size: 1.4rem;
+    font-weight: 400;
+    padding-bottom: 0.8rem;
+}
+
+
+
+.imformation-container {
+    flex: 1;
+    
+}
+
+.imformation__header {
+    height: 6rem;
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 500;
+    margin-top: 2.5rem;
+}
+
+.imformation__content {
+    display: flex;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+.imformation__content__img {
+    width: 35rem;
+    height: 35rem;
+    object-fit: cover;
+    border: 2px solid rgba(255, 0, 0, 0.4);
+    border-radius: 5px;
+}
+
+.information__content__list {
+    width: 100%;
+    height: 35rem;
+    list-style: none;
+    margin-left: 3rem;
+    padding: 3rem 2rem 1rem;
+    border-radius: 5px;
+    border: 2px solid rgba(255, 0, 0, 0.4);
+}
+
+.information__content__item {
+    height: 8rem;
+    font-size: 2rem;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.information__content__text {
+    margin-left: 1.5rem;
+    font-weight: 400;
+}
+
+.user-action-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2.5rem;
+}
+
+.user-action__button {
+    width: 18.2rem;
+    height: 5.2rem;
+    margin: 2.5rem 5rem 0 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1.8rem;
+    font-weight: 500;
+    border-radius: 10px;
+    transition: all 0.1s;
+}
+
+.user-action__button:hover{
+    transform: scale(1.1);
+}
+
+.user-action__button:active {
+    transform: scale(1);
+}
+
+.user-action__button--see {
+    background-color: #FF5858;
+}
+
+.user-action__button--accept, .user-action__button--confirm {
+    background-color: #FF57BC;
+}
+
+.user-action__button--reject {
+    background-color: #F1F1F1;
+}
+
+.hidden {
+    display: none;
+}

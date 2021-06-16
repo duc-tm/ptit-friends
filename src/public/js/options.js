@@ -12,3 +12,15 @@ window.addEventListener('click', (e)=>{
         }
     }
 });
+
+const logout = async () => {
+    const res = await fetch('http://localhost:3000/user/logout', {
+        method: 'POST',
+        credentials: 'include',
+    });
+
+    const resData = await res.json();
+    if(res.state) {
+        window.location.href = window.location.origin + '/' + resData.redirectPath;
+    }
+}

@@ -3,7 +3,7 @@ const modal = $('.modal');
 const loginBtn = $(".login-btn");
 const loginForm = $('.login');
 const loginExitBtn = $('.login__exit-btn');
-const messageContainerEle = $('.login__message');
+const loginMsgContainer = $('.login__message');
 const loginRegister = $('.login__header-signup');
 
 const registerForm = $('.register');
@@ -19,7 +19,7 @@ loginBtn.addEventListener("click", () => {
 loginExitBtn.addEventListener('click', () => {
     modal.classList.add('hidden');
     loginForm.classList.add('hidden');
-    toggleErrorMessage(messageContainerEle, '', 'error-msg', false);
+    toggleErrorMessage(loginMsgContainer, '', 'error-msg', false);
 });
 
 loginRegister.addEventListener('click', () => {
@@ -32,7 +32,8 @@ modal.addEventListener('click', () => {
     modal.classList.add('hidden');
     loginForm.classList.add('hidden');
     registerForm.classList.add('hidden');
-    toggleErrorMessage(messageContainerEle, '', 'error-msg', false);
+    toggleErrorMessage(loginMsgContainer, '', 'error-msg', false);
+
 });
 
 registerBtn.addEventListener("click", () => {
@@ -55,44 +56,48 @@ async function login() {
     const username = $('#login__username').value;
     const password = $('#login__password').value;
 
-    const res = await fetch('http://localhost:3000/user/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-    });
-
-    const resData = await res.json()
-    if (resData.msg) {
-        toggleErrorMessage(messageContainerEle, resData.msg, 'error-msg', true);
-        return;
+    try {
+        const res = await fetch('http://localhost:3000/user/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+        const resData = await res.json();
+        if(resData.msg) {
+            toggleErrorMessage(loginMsgContainer, resData.msg, 'error-msg', true);
+            return;
+        }
+        window.location.pathname = resData.redirectPath;
+    } catch (error) {
+        console.log(error)
     }
-    window.location.pathname = resData.redirectPath;
+
 }
 
 async function register() {
     const username = $('#register__username').value;
     const email = $('#register__email').value;
     const password = $('#register__password').value;
-    const passwordConfirm = $('#register__password-confirm').value
-    
-    if(password !== passwordConfirm) return;
+    const repassword = $('#register__password-confirm').value
 
     const res = await fetch('http://localhost:3000/user/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password, repassword })
     });
 
-    const resData = await res.json()
-    if (resData.msg) {
-        toggleErrorMessage(messageContainerEle, resData.msg, 'error-msg', true);
+    const msg = await res.json()
+    if (msg.state) {
+        // toggleErrorMessage(loginMsgContainer, resData.msg, 'error-msg', true);
+        // return;
+        // window.location.pathname = resData.redirectPath;
         return;
     }
-    window.location.pathname = resData.redirectPath;
+
 }
 
 function toggleErrorMessage(msgContainer, msg, htmlClass, toggleState) {

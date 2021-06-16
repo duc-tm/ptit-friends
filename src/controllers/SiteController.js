@@ -1,9 +1,21 @@
+const db = require('../utils/db');
+const queryStrings = require('../utils/db/queryString');
 
 class SiteController {
 
     // [GET] /
-    displayHomePage(req, res) {
-        res.render('home')
+    async displayHomePage(req, res) {
+        const result = await db.query(queryStrings.read.hobbyList, []);
+        const hobbyList = result.rows.map((hobby) => {
+            return hobby.hobbytype;
+        });
+
+        res.render('home', { renderHeaderPartial: true, hobbyList })
+    }
+
+    // [GET] /welcome
+    displayWelcomePage(req, res) {
+        res.render('welcome', { renderHeaderPartial: false })
     }
 }
 

@@ -297,7 +297,6 @@
     width: 100%;
     height: 4.2rem;
     margin-top: 5rem;
-    margin-bottom: 1.6rem;
     padding: 1.5rem;
     font-family: "Roboto",sans-serif;
     font-weight: 500;
@@ -319,7 +318,10 @@
     font-size: 1.4rem;
     border: solid 2px gray;
     border-radius: 4px;
-    margin-bottom: 1.6rem;
+}
+
+.form-message {
+    height: 2.2rem;
 }
 
 .register__button-container{

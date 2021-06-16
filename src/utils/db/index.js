@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const queryString = require('./queryString');
 const pool = new Pool({
     max: 10
 });
@@ -29,5 +30,8 @@ module.exports = {
         }
         queryString += `$${i})`
         return queryString;
+    },
+    genInsertMultiple: (paramsLength, queryString) => {
+        
     }
 }

@@ -11,16 +11,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <link rel="stylesheet" href="./css/base.css" />
-    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="/css/base.css" />
+    {{#if renderHeaderPartial}}
+    <link rel="stylesheet" href="/css/partials/header.css" />
+    {{/if}}
     {{{_sections.stylesheet}}}
+    <link rel="stylesheet" href="/css/common.css" />
 </head>
 
 <body>
     <div class="app">
         {{#if renderHeaderPartial}}
-            {{> header}}
+        {{> header}}
         {{/if}}
+        
         {{{body}}}
     </div>
     <script src="/js/index.js"></script>

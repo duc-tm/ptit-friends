@@ -4,6 +4,6 @@ module.exports = {
         if (user) {
             if (user.userId) return next();
         }
-        res.render('welcome', { renderHeaderPartial: false });
+        res.redirect('/welcome');
     }
 }

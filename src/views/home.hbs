@@ -1,6 +1,123 @@
-Home page
+{{#section 'stylesheet'}}
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/options.css">
+{{/section}}
+
+<div class="main">
+    <h1 class="main__header">
+        Tìm kiếm bạn bè
+    </h1>
+
+    <div class="main__button">
+        <div class="main__button-img-container">
+            <img src="/img/searching.png" alt="Search Img" class="main__button-img">
+            <p class="main__button-text">
+                Recommended<br>Matching
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<!-- Form chọn tiêu chí -->
+<div class="criteria-form hidden">
+    <h2 class="criteria-form__header">
+        Tiêu chí tìm kiếm
+    </h2>
+
+    <div class="criteria-form__hobbies">
+        <h3 class="criteria-header criteria-form__hobbies-header">Sở thích</h3>
+        <ul class="criteria-form__hobbies__list">
+            {{#each hobbyList}}
+            <li class="criteria-form__hobbies__item" value="{{this}}">{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="criteria-form__major">
+        <h3 class="criteria-header criteria-form__major-header">Ngành học</h3>
+        <ul class="criteria-form__major__list">
+            <li class="criteria-form__major__item" value="CNTT">CNTT</li>
+            <li class="criteria-form__major__item" value="CNDPT">CNDPT</li>
+            <li class="criteria-form__major__item" value="ATTT">ATTT</li>
+            <li class="criteria-form__major__item" value="TTDPT">TTDPT</li>
+            <li class="criteria-form__major__item" value="Marketing">Marketing</li>
+            <li class="criteria-form__major__item" value="QTKD">QTKD</li>
+        </ul>
+    </div>
+
+    <div class="criteria-form__age">
+        <h3 class="criteria-header criteria-form__age-header">Tuổi</h3>
+        <select name="age" id="criteria-age">
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+        </select>
+    </div>
+
+    <div class="criteria-form__gender">
+        <h3 class="criteria-header criteria-form__gender-header">Giới tính</h3>
+        <select name="gender" id="criteria-gender">
+            <option value="male">Nam</option>
+            <option value="female">Nữ</option>
+        </select>
+    </div>
+
+    <div class="criteria-form__btn-container">
+        <button class="criteria-form__btn criteria-form__btn-exit">Huỷ</button>
+        <button class="criteria-form__btn criteria-form__btn-find">
+            <i class="fas fa-search criteria-form__btn-find__icon"></i>
+            Tìm kiếm
+        </button>
+    </div>
+</div>
+
+<!-- Form chọn ghép đôi -->
+<div class="connect-send-form hidden">
+
+    <div class="connect-send__select">
+        <div class="connect-send__select__back">
+            <i class="fas fa-arrow-left back-icon"></i>
+            <p>Quay lại</p>
+        </div>
+
+        <div class="connect-send__main">
+            <div class="connect-send__container">
+                <ul class="connect-send__list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="imformation-container">
+        <div class="imformation__header">
+            Thông tin chung
+        </div>
+
+        <div class="imformation__content"></div>
+
+        <div class="user-action-container hidden">
+            <button class="user-action__button user-action__button--see">
+                Xem trang cá nhân
+            </button>
+            <button class="user-action__button user-action__button--accept">
+                Chốt người này
+            </button>
+            <button class="user-action__button user-action__button--reject">
+                Bỏ qua
+            </button>
+            <button class="user-action__button user-action__button--confirm">
+                Đã chọn xong
+            </button>
+        </div>
+    </div>
+</div>
 
 {{#section 'script'}}
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/socket.js"></script>
+<script src="/js/options.js"></script>
+<script src="/js/home.js"></script>
 {{/section}}

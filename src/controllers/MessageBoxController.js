@@ -5,6 +5,7 @@ class MessageBoxController {
 
     // [GET] /message-box
     async displayMessageBoxList(req, res) {
+        console.log(req.session)
         const userId = req.session.user.userId;
 
         try {
@@ -13,33 +14,42 @@ class MessageBoxController {
                 db.query(queryStrings.read.connectionList, [userId])
             ]);
 
-            const rowsList = results.reduce((rowsList, result) => {
-                rowsList.push(result.rows);
-                return rowsList;
+            const rowsList = results.reduce((total, result) => {
+                if (result.rows.length > 0)
+                    total.push(result.rows);
+                return total;
             }, []);
 
-            const targetIdList = rowsList[0].map((row) => {
-                return userId === row.user1id ? row.user2id : row.user1id;
+            let messageBoxList = [];
+
+            if (rowsList.length > 0) {
+                console.log('aa')
+                const targetIdList = rowsList[0].map((row) => {
+                    return userId === row.user1id ? row.user2id : row.user1id;
+                });
+
+                const result = await db.query(
+                    db.genQueryIn(targetIdList.length, queryStrings.read.userList),
+                    targetIdList
+                );
+
+                const targetList = result.rows;
+
+                messageBoxList = rowsList[0].map((row, index) => {
+                    const row1 = rowsList[1][index];
+                    return {
+                        messageBoxId: row.messageboxid,
+                        target: targetList[index],
+                        connectionState: row1.connectionstate,
+                        connectionType: row1.connectiontype
+                    }
+                });
+            }
+
+            res.render('messagebox', {
+                renderHeaderPartial: true,
+                messageBoxList: messageBoxList
             });
-
-            const result = await db.query(
-                db.genQueryIn(targetIdList.length, queryStrings.read.userList),
-                targetIdList
-            );
-
-            const targetList = result.rows;
-
-            const messageBoxList = rowsList[0].map((row, index) => {
-                const row1 = rowsList[1][index];
-                return {
-                    messageBoxId: row.messageboxid,
-                    target: targetList[index],
-                    connectionState: row1.connectionstate,
-                    connectionType: row1.connectiontype
-                }
-            })
-
-            res.render('messagebox', { renderHeaderPartial: true, messageBoxList });
         } catch (error) {
             console.log(error);
             res.status(503).json({ state: false });

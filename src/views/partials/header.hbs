@@ -14,9 +14,21 @@
             </svg>
         </div>
         <ul class="header__list">
-            <li class="header__item">Trang chủ</li>
-            <li class="header__item">Yêu cầu ghép cặp</li>
-            <li class="header__item">Message Box</li>
+            <li class="header__item">
+                <a href="/">
+                    Trang chủ
+                </a>
+            </li>
+            <li class="header__item">
+                <a href="/user/friend-request">
+                    Yêu cầu ghép cặp
+                </a>
+            </li>
+            <li class="header__item">
+                <a href="/message-box">
+                    Message Box
+                </a>
+            </li>
         </ul>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -27,7 +39,7 @@
                 fill="#FFFEFE" />
         </svg>
         <div class="header__acc">
-            <img src="./assets/img/63af987a2cf528462ae90e36c72f6e96.jpeg" alt="" class="header__acc-avatar">
+            <img src="/img/monleo.jpg" alt="" class="header__acc-avatar">
             <p class="header__acc-name">Minh</p>
             <i class="fas fa-chevron-down header__acc--dropdown"></i>
         </div>
@@ -36,13 +48,16 @@
         <div class="options-container hidden">
             <ul class="options-list">
                 <li class="options-item options-item-imform">
-                    <i class="fas fa-user-alt options-item-icon"></i> <span>Thông tin cá nhân</span>
+                    <i class="fas fa-user-alt options-item-icon"></i>
+                    <a href="#">Thông tin cá nhân</a>
                 </li>
                 <li class="options-item options-item-chage-pw">
-                    <i class="fas fa-lock options-item-icon"></i> <span>Đổi mật khẩu</span>
+                    <i class="fas fa-lock options-item-icon"></i>
+                    <a href="#">Đổi mật khẩu</a>
                 </li>
-                <li class="options-item options-item-signout">
-                    <i class="fas fa-door-open options-item-icon"></i> <span>Đăng xuất</span>
+                <li class="options-item options-item-signout" onclick="logout()">
+                    <i class="fas fa-door-open options-item-icon"></i>
+                    <span>Đăng xuất</span>
                 </li>
             </ul>
         </div>

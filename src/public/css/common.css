@@ -1,5 +1,18 @@
+.app {
+    position: relative;
+}
+
 .error-msg {
-    display: block;
+    display: flex;
+    align-items: center;
     font-size: 1.3rem;
     color: red;
+}
+
+.chosen {
+    border: 5px dashed yellow;
+}
+
+.hidden {
+    display: none;
 }
