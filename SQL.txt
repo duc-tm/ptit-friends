@@ -3,21 +3,12 @@ create table users (
 	fName varchar(255),
 	age smallint,
 	gender varchar(255)
-);
-
-create table normalusers (
-	userId bigserial not null,
-	major text,
+	major varchar(255),
 	address text,
-	foreign key (userId) references users(userId) on delete cascade
-);
-
-create table accounts (
-	userId bigserial not null,
-	username varchar(255) not null,
-	password text not null,
+	username varchar(255),
+	password text,
 	userRole boolean,
-	foreign key (userId) references users(userId) on delete cascade
+	email varchar(350)
 );
 
 create table chatconnections (
@@ -79,10 +70,10 @@ create table friendrequests (
 	foreign key (senderid) references users(userid) on delete cascade
 );
 
-//Feed data
-insert into hobbies
-values(default, 'Thể thao'), (default, 'Âm nhạc'), (default, 'Du lịch'), (default, 'Học tập'), (default, 'Game'),
-(default, 'Nấu ăn'), (default, 'Làm việc'), (default, 'Tám');
+-- Feed data
+-- insert into hobbies
+-- values(default, 'Thể thao'), (default, 'Âm nhạc'), (default, 'Du lịch'), (default, 'Học tập'), (default, 'Game'),
+-- (default, 'Nấu ăn'), (default, 'Làm việc'), (default, 'Tám');
 
 -- insert into usershobby
 -- values(6, 1), (6, 4), (7, 2), (6, 8), (8, 3), (9, 1), (9, 8), (7, 4), (6, 7), (8, 2), (7, 6);
