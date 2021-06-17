@@ -1,6 +1,7 @@
 const messageInput = $('.action__input');
 const sendButton = $('.action__send');
 const messageChat = $('.message-box__chat__main');
+const lastMessageContainer = $('.message-box__item-last-message');
 
 socket.on('server-send-message', (message) => {
     receiveMessage(message);
@@ -40,6 +41,7 @@ const renderMessage = (message, messageContainer, imgLink) => {
                     <div class="${messageContainer}__text">${message}</div>
                 </div>`;
     messageChat.insertAdjacentHTML('beforeend', html);
+    lastMessageContainer.innerText = message;
 }
 
 const saveMessage = async (message, messageBoxId) => {
