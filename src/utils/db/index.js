@@ -22,13 +22,13 @@ module.exports = {
             callback(error, client, done);
         });
     },
-    genQueryIn: (paramsLength, queryString) => {
+    genQueryIn: (paramsLength, queryString, startIndex = 0) => {
         queryString += '(';
         let i = 1;
         for(i; i < paramsLength; i++) {
-            queryString += `$${i}, `;
+            queryString += `$${i + startIndex}, `;
         }
-        queryString += `$${i})`
+        queryString += `$${i + startIndex})`
         return queryString;
     },
     genInsertMultiple: (paramsLength, queryString) => {

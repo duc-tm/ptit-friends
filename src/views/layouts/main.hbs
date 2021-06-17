@@ -22,7 +22,7 @@
 <body>
     <div class="app">
         {{#if renderHeaderPartial}}
-        {{> header}}
+        {{> header this.user}}
         {{/if}}
 
         {{{body}}}

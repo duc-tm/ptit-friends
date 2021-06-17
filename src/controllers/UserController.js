@@ -75,7 +75,24 @@ class UserController {
         const userId = req.session.user.userId;
 
         try {
-            let result = await db.query(queryStrings.read.randomUserList, [userId, preferGender]);
+            let result = await db.query(queryStrings.read.connectionList, [userId]);
+            const connectedTargetIdList = result.rows.reduce((total, row) => {
+                if (row.connectionstate) {
+                    const connectedTargetId = row.user1id === userId ? row.user2id : row.user1id;
+                    total.push(connectedTargetId);
+                }
+                return total;
+            }, []);
+
+            const countConnection = connectedTargetIdList.length;
+            result = await db.query(
+                (countConnection > 0 ? db.genQueryIn(countConnection,
+                    queryStrings.read.randomUserList + ' AND userid NOT IN', 2)
+                    : queryStrings.read.randomUserList
+                )
+                + ' ORDER BY RANDOM() LIMIT 20',
+                [userId, preferGender, ...connectedTargetIdList]
+            );
 
             let targetList = result.rows.map((row) => {
                 return new userModel(row);
@@ -147,13 +164,20 @@ class UserController {
 
     // [GET] /user/friend-request
     async getFriendRequest(req, res) {
+        const userId = req.session.user.userId;
+
         try {
-            const result = await db.query(queryStrings.read.friendRequestList, [req.session.user.userId]);
-            const senderList = result.rows.map((row) => {
+
+            const results = await Promise.all([
+                db.query(queryStrings.read.friendRequestList, [userId]),
+                db.query(queryStrings.read.byId, [userId])
+            ]);
+            const senderList = results[0].rows.map((row) => {
                 return new userModel(row);
             });
+            const user = new userModel(results[1].rows[0]);
 
-            res.render('friendrequest', { renderHeaderPartial: true, senderList });
+            res.render('friendrequest', { renderHeaderPartial: true, user, senderList });
         } catch (error) {
             console.log(error);
             res.status(503).json({ msg: 'Server got some error. Please try again later.' });

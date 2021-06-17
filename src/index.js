@@ -48,6 +48,11 @@ app.engine('hbs', ehbs({
         },
         genderMapping: function (gender) {
             return gender === 'male' ? 'Nam' : 'Nữ';
+        },
+        getUserLastName: function (fName) {
+            if(!fName) return 'No name';
+            const fNameArr = fName.split(' ');
+            return fNameArr[fNameArr.length - 1];
         }
     },
 }));

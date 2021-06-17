@@ -1,12 +1,14 @@
 const db = require('../utils/db');
 const queryStrings = require('../utils/db/queryString');
+const userModel = require('../models/UserModel');
 
 class MessageBoxController {
 
     // [GET] /message-box
     async displayMessageBoxList(req, res) {
-        console.log(req.session)
         const userId = req.session.user.userId;
+        const result = await db.query(queryStrings.read.byId, [userId]);
+        const user = new userModel(result.rows[0]);
 
         try {
             const results = await Promise.all([
@@ -23,7 +25,6 @@ class MessageBoxController {
             let messageBoxList = [];
 
             if (rowsList.length > 0) {
-                console.log('aa')
                 const targetIdList = rowsList[0].map((row) => {
                     return userId === row.user1id ? row.user2id : row.user1id;
                 });
@@ -35,19 +36,28 @@ class MessageBoxController {
 
                 const targetList = result.rows;
 
-                messageBoxList = rowsList[0].map((row, index) => {
+                messageBoxList = await Promise.all(rowsList[0].map(async (row, index) => {
+                    const messageBoxId = row.messageboxid;
+                    const result = await db.query(
+                        queryStrings.read.messageList + 'ORDER BY messageid DESC LIMIT 1',
+                        [messageBoxId]
+                    );
+
                     const row1 = rowsList[1][index];
                     return {
-                        messageBoxId: row.messageboxid,
+                        messageBoxId: messageBoxId,
                         target: targetList[index],
+                        lastMessage: (result.rows[0] ? result.rows[0].messagecontent : ''),
                         connectionState: row1.connectionstate,
                         connectionType: row1.connectiontype
                     }
-                });
+                }));
+                console.log(messageBoxList)
             }
 
             res.render('messagebox', {
                 renderHeaderPartial: true,
+                user,
                 messageBoxList: messageBoxList
             });
         } catch (error) {

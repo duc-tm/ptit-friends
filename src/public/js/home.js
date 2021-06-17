@@ -97,6 +97,11 @@ const getTargetInfo = async function () {
     if (!resData.msg) {
         const targetInfo = resData.target;
         renderTargetInfo(targetInfo);
+        if (this.classList.contains('chosen')) {
+            toggleChooseButton($('.user-action__button--remove'), $('.user-action__button--accept'));
+        } else {
+            toggleChooseButton($('.user-action__button--accept'), $('.user-action__button--remove'));
+        }
     }
 }
 
@@ -148,27 +153,44 @@ window.onload = setMajorMap;
 
 criteriaButtonFind.addEventListener('click', submitCriteriaForm);
 
-const pushToChosenList = () => {
+const toggleChooseButton = (displayButton, hiddenButton) => {
+    displayButton.classList.remove('hidden');
+    hiddenButton.classList.add('hidden');
+}
+
+const pushToChosenList = function () {
     const activeEle = $('.connect-send__item--active');
     const targetId = activeEle.getAttribute('userid');
     chosenList.push(targetId);
     activeEle.classList.add('chosen');
+    toggleChooseButton($('.user-action__button--remove'), this);
+}
+
+const removeFromChosenList = function () {
+    const activeEle = $('.connect-send__item--active');
+    const targetId = activeEle.getAttribute('userid');
+    chosenList.splice(chosenList.indexOf(targetId), 1);
+    activeEle.classList.remove('chosen');
+    toggleChooseButton($('.user-action__button--accept'), this);
 }
 
 const sendAddFriendRequest = async () => {
-    const res = await fetch('http://localhost:3000/user/send-friend-request', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ chosenList })
-    })
+    if (chosenList.length > 0) {
+        const res = await fetch('http://localhost:3000/user/send-friend-request', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ chosenList })
+        })
 
-    const resData = await res.json();
-    if(resData.state) {
-        console.log('send success')
+        const resData = await res.json();
+        if (!resData.state) {
+            console.log(error);
+        }
     }
+    window.location.pathname = '/';
 }
 
 $('.user-action__button--reject').addEventListener('click', () => {
@@ -178,5 +200,7 @@ $('.user-action__button--reject').addEventListener('click', () => {
 });
 
 $('.user-action__button--accept').addEventListener('click', pushToChosenList);
+
+$('.user-action__button--remove').addEventListener('click', removeFromChosenList);
 
 $('.user-action__button--confirm').addEventListener('click', sendAddFriendRequest)

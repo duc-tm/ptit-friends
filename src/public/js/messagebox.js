@@ -80,8 +80,11 @@ const showBoxChat = async function () {
                 credentials: 'include',
             }
         )
+
         const { state, messageInfoList } = await res.json();
         if (state) {
+            const targetFName = this.querySelector('.message-box__item-heading').textContent;
+            $('.head__name').innerText = targetFName;
             const boxChatEle = $('.message-box__chat');
             $('.message-box__chat__main').innerHTML = '';
 

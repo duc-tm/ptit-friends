@@ -372,7 +372,9 @@
 }
 
 .information__content__text {
+    display: inline-block;
     margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
     font-weight: 400;
 }
 
@@ -415,6 +417,10 @@
 }
 
 .user-action__button--reject {
+    background-color: #F1F1F1;
+}
+
+.user-action__button--remove {
     background-color: #F1F1F1;
 }
 
