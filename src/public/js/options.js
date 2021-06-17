@@ -20,7 +20,8 @@ const logout = async () => {
     });
 
     const resData = await res.json();
-    if(res.state) {
-        window.location.href = window.location.origin + '/' + resData.redirectPath;
+    if(resData.state) {
+        console.log('redirect')
+        window.location.pathname = resData.redirectPath;
     }
 }

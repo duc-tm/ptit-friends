@@ -52,9 +52,11 @@ registerLogin.addEventListener('click', () => {
     modal.classList.remove('hidden');
 });
 
-async function login() {
-    const username = $('#login__username').value;
-    const password = $('#login__password').value;
+async function login(username, password) {
+    if (!username) {
+        username = $('#login__username').value;
+        password = $('#login__password').value;
+    }
 
     try {
         const res = await fetch('http://localhost:3000/user/login', {
@@ -64,8 +66,9 @@ async function login() {
             },
             body: JSON.stringify({ username, password })
         });
+
         const resData = await res.json();
-        if(resData.msg) {
+        if (resData.msg) {
             toggleErrorMessage(loginMsgContainer, resData.msg, 'error-msg', true);
             return;
         }
@@ -73,7 +76,6 @@ async function login() {
     } catch (error) {
         console.log(error)
     }
-
 }
 
 async function register() {
@@ -90,14 +92,18 @@ async function register() {
         body: JSON.stringify({ username, email, password, repassword })
     });
 
-    const msg = await res.json()
-    if (msg.state) {
-        // toggleErrorMessage(loginMsgContainer, resData.msg, 'error-msg', true);
-        // return;
-        // window.location.pathname = resData.redirectPath;
+    const resData = await res.json()
+    if (resData.state) {
+        Swal.fire({
+            title: 'Đăng ký thành công',
+            icon: 'success',
+            footer: `<p id="auto-login" class="clickme" style="color:#172c6b; font-size:1.5rem;">Tự động đăng nhập?</p>`
+        });
+        $('#auto-login').onclick = () => {
+            return login(username, password);
+        };
         return;
     }
-
 }
 
 function toggleErrorMessage(msgContainer, msg, htmlClass, toggleState) {

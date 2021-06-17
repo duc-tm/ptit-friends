@@ -16,3 +16,7 @@
 .hidden {
     display: none;
 }
+
+.clickme:hover {
+    cursor: pointer;
+}
