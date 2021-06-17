@@ -52,7 +52,6 @@ class MessageBoxController {
                         connectionType: row1.connectiontype
                     }
                 }));
-                console.log(messageBoxList)
             }
 
             res.render('messagebox', {

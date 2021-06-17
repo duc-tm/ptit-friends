@@ -14,8 +14,8 @@ module.exports = function socketListener(socketServer) {
             console.log(`set ${userId} with ${socket.id}`);
         });
 
-        socket.on('client-send-message', ({ message, targetId }) => {
-            socket.to(userSocketIds.get(targetId)).emit('server-send-message', message);
+        socket.on('client-send-message', ({ message, targetId, senderId }) => {
+            socket.to(userSocketIds.get(targetId)).emit('server-send-message', { message, senderId });
         });
 
     });

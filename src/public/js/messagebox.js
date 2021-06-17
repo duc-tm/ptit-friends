@@ -1,7 +1,6 @@
 const messageInput = $('.action__input');
 const sendButton = $('.action__send');
 const messageChat = $('.message-box__chat__main');
-const lastMessageContainer = $('.message-box__item-last-message');
 
 socket.on('server-send-message', (message) => {
     receiveMessage(message);
@@ -23,16 +22,31 @@ const sendMessage = async () => {
     if (!res.state) return;
 
     const targetId = messageBoxActiveEle.getAttribute('targetId');
-    socket.emit('client-send-message', { message, targetId });
+    socket.emit('client-send-message', { message, targetId, senderId: userId });
 
+    updateLastMessage(message);
     renderMessage(message, 'massage-out');
     toBottomBox();
 }
 
-const receiveMessage = (message) => {
+const receiveMessage = ({ message, senderId }) => {
     const imgLink = $('.massage-in__img').src;
+    updateLastMessage(message, senderId);
     renderMessage(message, 'massage-in', imgLink);
     toBottomBox();
+}
+
+const updateLastMessage = (message, senderId) => {
+    let lastMessageContainer;
+    if (!senderId) {
+        lastMessageContainer = $('.message-box__item--active')
+            .querySelector('.message-box__item-last-message');
+    }
+    else {
+        lastMessageContainer = $(`.message-box__item[targetid="${senderId}"]`)
+            .querySelector('.message-box__item-last-message');
+    }
+    lastMessageContainer.innerText = message;
 }
 
 const renderMessage = (message, messageContainer, imgLink) => {
@@ -41,7 +55,6 @@ const renderMessage = (message, messageContainer, imgLink) => {
                     <div class="${messageContainer}__text">${message}</div>
                 </div>`;
     messageChat.insertAdjacentHTML('beforeend', html);
-    lastMessageContainer.innerText = message;
 }
 
 const saveMessage = async (message, messageBoxId) => {
@@ -71,7 +84,7 @@ const assignShowBoxChatHandler = () => {
 }
 
 const showBoxChat = async function () {
-    if(this.classList.contains('message-box__item--active')) return;
+    if (this.classList.contains('message-box__item--active')) return;
 
     const messageBoxId = this.getAttribute('messageBoxId');
     try {
@@ -90,12 +103,12 @@ const showBoxChat = async function () {
             const boxChatEle = $('.message-box__chat');
             $('.message-box__chat__main').innerHTML = '';
 
+            toogleActiveClass(this, boxChatEle);
+
             messageInfoList.forEach((messageInfo) => {
                 const messageContainer = userId === messageInfo.userid ? 'massage-out' : 'massage-in';
                 renderMessage(messageInfo.messagecontent, messageContainer);
             });
-
-            toogleActiveClass(this, boxChatEle);
 
             toBottomBox();
         }
@@ -111,12 +124,12 @@ const toBottomBox = () => {
 
 const toogleActiveClass = (messageBoxEle, boxChatEle) => {
     const activeMessageBox = $('.message-box__item--active');
-    if(activeMessageBox) {
+    if (activeMessageBox) {
         activeMessageBox.classList.remove('message-box__item--active');
     }
 
     messageBoxEle.classList.add('message-box__item--active');
-    if(!boxChatEle.classList.contains('message-box__chat--active')) {
+    if (!boxChatEle.classList.contains('message-box__chat--active')) {
         boxChatEle.classList.add('message-box__chat--active');
     }
 }
