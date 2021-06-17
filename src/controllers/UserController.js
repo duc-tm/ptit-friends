@@ -134,7 +134,7 @@ class UserController {
 
         try {
             await chosenList.forEach((targetId) => {
-                db.query(queryStrings.create.friendRequest, [userId, targetId, false]);
+                db.query(queryStrings.create.friendRequest, [targetId, userId, false]);
             });
 
             res.status(201).json({ state: true });
@@ -145,10 +145,42 @@ class UserController {
 
     }
 
-    // [GET] /use/friend-request
+    // [GET] /user/friend-request
     async getFriendRequest(req, res) {
-        const result = await db.query(queryStrings.read.friendRequestList, [req.session.user.userId]);
-        res.render('friendrequest', { renderHeaderPartial: true });
+        try {
+            const result = await db.query(queryStrings.read.friendRequestList, [req.session.user.userId]);
+            const senderList = result.rows.map((row) => {
+                return new userModel(row);
+            });
+
+            res.render('friendrequest', { renderHeaderPartial: true, senderList });
+        } catch (error) {
+            console.log(error);
+            res.status(503).json({ msg: 'Server got some error. Please try again later.' });
+        }
+    }
+
+    // [POST] /user/respond-friend-request
+    async respondFriendRequest(req, res) {
+        const { targetId, responseState } = req.body;
+        const userId = req.session.user.userId;
+
+        try {
+            await Promise.all([
+                db.query(queryStrings.update.friendRequestState, [true, userId, targetId]),
+                (responseState ?
+                    [
+                        db.query(queryStrings.create.chatConnection, [userId, targetId, true, false]),
+                        db.query(queryStrings.create.messageBox, [userId, targetId])
+                    ]
+                    : true)
+            ]);
+
+            res.status(201).json({ state: true });
+        } catch (error) {
+            console.log(error);
+            res.status(503).json({ msg: 'Server got some error. Please try again later.' });
+        }
     }
 }
 

@@ -46,6 +46,9 @@ app.engine('hbs', ehbs({
             this._sections[name] = options.fn(this);
             return null;
         },
+        genderMapping: function (gender) {
+            return gender === 'male' ? 'Nam' : 'Nữ';
+        }
     },
 }));
 app.set('view engine', 'hbs');

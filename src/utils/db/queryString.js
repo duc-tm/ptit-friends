@@ -19,9 +19,12 @@ module.exports = {
     create: {
         user: 'INSERT INTO users(username, password, email) VALUES($1, $2, $3)',
         message: 'INSERT INTO messages(messageBoxId, userId, messageContent) VALUES($1, $2, $3)',
-        friendRequest: 'INSERT INTO friendrequests(userid, senderid, requeststate) VALUES($1, $2, $3)'
+        friendRequest: 'INSERT INTO friendrequests(userid, senderid, requeststate) VALUES($1, $2, $3)',
+        chatConnection: 'INSERT INTO chatconnections(user1id, user2id, connectionstate, connectiontype) '
+            + 'VALUES($1, $2, $3, $4)',
+        messageBox: 'INSERT INTO messageboxes(user1id, user2id) VALUES($1, $2)'
     },
     update: {
-        friendRequestState: 'UPDATE friendrequests SET requeststate = $1 WHERE userid = $2'
+        friendRequestState: 'UPDATE friendrequests SET requeststate = $1 WHERE userid = $2 AND senderid = $3'
     }
 }

@@ -13,5 +13,6 @@ router.post('/matching', userMiddleware.isLogedIn, userController.matching);
 router.get('/get-info/:id', userMiddleware.isLogedIn, userController.getUserInfo);
 router.post('/send-friend-request', userMiddleware.isLogedIn, userController.sendFriendRequest);
 router.get('/friend-request', userMiddleware.isLogedIn, userController.getFriendRequest);
+router.post('/respond-friend-request', userMiddleware.isLogedIn, userController.respondFriendRequest);
 
 module.exports = router;

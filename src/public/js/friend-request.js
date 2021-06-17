@@ -1,19 +1,22 @@
 const requestListContainer = $('.connect-request__list');
 const targetInfoContainer = $('.imformation__content');
 const userActionContainer = $('.user-action-container');
+const majorMapping = new Map();
 
-const renderTargetList = (targetList, targetListEle) => {
-    let html = '';
-    targetList.forEach((target) => {
-        html += `<li class="connect-send__item" userid=${target.userId}>
-        <img src="/img/monleo.jpg" alt="" class="connect-send__img">
-        <div class="connect-send__brief">
-        <div class="connect-send__name">${target.fName}</div>
-        <div class="connect-send__gender">${target.gender === 'male' ? 'Nam' : 'Nữ'}</div>
-        </div>
-        </li>`;
+window.onload = () => {
+    $$('.connect-request__item').forEach((element) => {
+        element.onclick = getTargetInfo;
     });
-    targetListEle.insertAdjacentHTML('beforeend', html);
+    setMajorMap();
+}
+
+const setMajorMap = () => {
+    majorMapping.set('CNTT', 'Công nghệ thông tin');
+    majorMapping.set('CNDPT', 'Công nghệ đa phương tiện');
+    majorMapping.set('ATTT', 'An toàn thông tin');
+    majorMapping.set('TTDPT', 'Truyền thông đa phương tiện');
+    majorMapping.set('Marketing', 'Marketing');
+    majorMapping.set('QTKD', 'Quản trị kinh doanh');
 }
 
 const toggleActiveEle = (inactiveEle, activeEle, className) => {
@@ -22,9 +25,9 @@ const toggleActiveEle = (inactiveEle, activeEle, className) => {
 }
 
 const getTargetInfo = async function () {
-    if (this.classList.contains('connect-send__item--active')) return;
-    const prevActiveEle = $('.connect-send__item--active');
-    toggleActiveEle(prevActiveEle, this, 'connect-send__item--active');
+    if (this.classList.contains('connect-request__item--active')) return;
+    const prevActiveEle = $('.connect-request__item--active');
+    toggleActiveEle(prevActiveEle, this, 'connect-request__item--active');
 
     const res = await fetch(`http://localhost:3000/user/get-info/${this.getAttribute('userid')}`, {
         method: 'GET',
@@ -77,7 +80,13 @@ const renderTargetInfo = ({ fName, age, major, hobbies }) => {
     userActionContainer.classList.remove('hidden');
 }
 
-const respondFriendRequest = async (state) => {
+const removeRequest = () => {
+    $('.connect-request__item--active').remove();
+    targetInfoContainer.innerHTML = '';
+    userActionContainer.classList.add('hidden');
+}
+
+const respondFriendRequest = async (responseState) => {
     const targetId = $('.connect-request__item--active').getAttribute('userid');
 
     const res = await fetch('http://localhost:3000/user/respond-friend-request', {
@@ -86,7 +95,7 @@ const respondFriendRequest = async (state) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ targetId, state })
+        body: JSON.stringify({ targetId, responseState })
     });
 
     const resData = await res.json();
@@ -100,7 +109,14 @@ const acceptFriendRequest = async () => {
     const res = await respondFriendRequest(true);
 
     if (res) {
-        console.log('sent');
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Phản hồi yêu cầu thành công!',
+            showConfirmButton: false,
+            timer: 1500
+        });
+        removeRequest();
     }
 }
 
@@ -108,9 +124,14 @@ const rejectFriendRequest = async () => {
     const res = await respondFriendRequest(false);
 
     if (res) {
-        $('.connect-request__item--active').remove();
-        targetInfoContainer.innerHTML = '';
-        userActionContainer.classList.add('hidden');
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Phản hồi yêu cầu thành công!',
+            showConfirmButton: false,
+            timer: 1500
+        });
+        removeRequest();
     }
 }
 
