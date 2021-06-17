@@ -98,18 +98,20 @@ class UserController {
                 return new userModel(row);
             });
             const targetIdList = targetList.map((target) => target.userId);
+            let targetHobbyList = {};
+            if (targetIdList.length > 0) {
+                result = await db.query(
+                    db.genQueryIn(targetIdList.length, queryStrings.read.userHobbies),
+                    targetIdList
+                );
 
-            result = await db.query(
-                db.genQueryIn(targetIdList.length, queryStrings.read.userHobbies),
-                targetIdList
-            );
-
-            const targetHobbyList = result.rows.reduce((total, hobby) => {
-                const userId = hobby.userid;
-                if (!total[userId]) total[userId] = new Map();
-                total[userId].set(hobby.hobbytype, true);
-                return total;
-            }, {});
+                targetHobbyList = result.rows.reduce((total, hobby) => {
+                    const userId = hobby.userid;
+                    if (!total[userId]) total[userId] = new Map();
+                    total[userId].set(hobby.hobbytype, true);
+                    return total;
+                }, {});
+            }
 
             targetList = userHelper.calMatchingPoint(
                 targetList, targetHobbyList, preferHobbies, preferAge, preferMajors
