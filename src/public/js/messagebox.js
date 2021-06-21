@@ -24,30 +24,30 @@ const sendMessage = async () => {
     const targetId = messageBoxActiveEle.getAttribute('targetId');
     socket.emit('client-send-message', { message, targetId, senderId: userId });
 
-    updateLastMessage(message);
+    // updateLastMessage(message);
     renderMessage(message, 'massage-out');
     toBottomBox();
 }
 
 const receiveMessage = ({ message, senderId }) => {
     const imgLink = $('.massage-in__img').src;
-    updateLastMessage(message, senderId);
+    // updateLastMessage(message, senderId);
     renderMessage(message, 'massage-in', imgLink);
     toBottomBox();
 }
 
-const updateLastMessage = (message, senderId) => {
-    let lastMessageContainer;
-    if (!senderId) {
-        lastMessageContainer = $('.message-box__item--active')
-            .querySelector('.message-box__item-last-message');
-    }
-    else {
-        lastMessageContainer = $(`.message-box__item[targetid="${senderId}"]`)
-            .querySelector('.message-box__item-last-message');
-    }
-    lastMessageContainer.innerText = message;
-}
+// const updateLastMessage = (message, senderId) => {
+//     let lastMessageContainer;
+//     if (!senderId) {
+//         lastMessageContainer = $('.message-box__item--active')
+//             .querySelector('.message-box__item-last-message');
+//     }
+//     else {
+//         lastMessageContainer = $(`.message-box__item[targetid="${senderId}"]`)
+//             .querySelector('.message-box__item-last-message');
+//     }
+//     lastMessageContainer.innerText = message;
+// }
 
 const renderMessage = (message, messageContainer, imgLink) => {
     const html = `<div class="${messageContainer}">

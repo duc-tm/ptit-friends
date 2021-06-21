@@ -38,16 +38,16 @@ class MessageBoxController {
 
                 messageBoxList = await Promise.all(rowsList[0].map(async (row, index) => {
                     const messageBoxId = row.messageboxid;
-                    const result = await db.query(
-                        queryStrings.read.messageList + 'ORDER BY messageid DESC LIMIT 1',
-                        [messageBoxId]
-                    );
+                    // const result = await db.query(
+                    //     queryStrings.read.messageList + 'ORDER BY messageid DESC LIMIT 1',
+                    //     [messageBoxId]
+                    // );
 
                     const row1 = rowsList[1][index];
                     return {
                         messageBoxId: messageBoxId,
                         target: targetList[index],
-                        lastMessage: (result.rows[0] ? result.rows[0].messagecontent : ''),
+                        // lastMessage: (result.rows[0] ? result.rows[0].messagecontent : ''),
                         connectionState: row1.connectionstate,
                         connectionType: row1.connectiontype
                     }
