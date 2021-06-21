@@ -2,7 +2,7 @@ create table users (
 	userId bigserial primary key not null,
 	fName varchar(255),
 	age smallint,
-	gender varchar(255)
+	gender varchar(255),
 	major varchar(255),
 	address text,
 	username varchar(255),

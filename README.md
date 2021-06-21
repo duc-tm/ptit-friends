@@ -24,3 +24,6 @@
     -> Type in install command above
     -> replace "depen_name" and "depen_ver" with dependency's info in package.json
     -> remove "<",">" before press "enter"
+ 3. Setup Database
+   Create empty PostgreSQL database
+   Copy+Paste and run command in SQL.txt
