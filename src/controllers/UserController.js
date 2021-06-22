@@ -85,12 +85,13 @@ class UserController {
             }, []);
 
             const countConnection = connectedTargetIdList.length;
+            const queryString = (countConnection > 0 ?
+                db.genQueryIn(countConnection, queryStrings.read.randomUserList + ' AND userid NOT IN', 2)
+                : queryStrings.read.randomUserList
+            );
+
             result = await db.query(
-                (countConnection > 0 ? db.genQueryIn(countConnection,
-                    queryStrings.read.randomUserList + ' AND userid NOT IN', 2)
-                    : queryStrings.read.randomUserList
-                )
-                + ' ORDER BY RANDOM() LIMIT 20',
+                db.genQueryRandom(20, queryString),
                 [userId, preferGender, ...connectedTargetIdList]
             );
 

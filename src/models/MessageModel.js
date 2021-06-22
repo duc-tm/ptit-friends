@@ -6,3 +6,5 @@ class Message {
         this.createdAt = createdat;
     }
 }
+
+module.exports = Message;

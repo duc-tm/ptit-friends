@@ -1,6 +1,9 @@
 const db = require('../utils/db');
 const queryStrings = require('../utils/db/queryString');
+const { mapRows } = require('../utils/db/rowMapper');
 const userModel = require('../models/UserModel');
+const messageBoxModel = require('../models/MessageBoxModel');
+const connectionModel = require('../models/ConnectionModel');
 
 class MessageBoxController {
 
@@ -16,40 +19,36 @@ class MessageBoxController {
                 db.query(queryStrings.read.connectionList, [userId])
             ]);
 
-            const rowsList = results.reduce((total, result) => {
-                if (result.rows.length > 0)
-                    total.push(result.rows);
-                return total;
-            }, []);
+            const messageBoxList = mapRows(results[0].rows, results[0].rowCount, messageBoxModel);
+            const connectionList = mapRows(results[1].rows, results[1].rowCount, connectionModel);
 
-            let messageBoxList = [];
+            let chatBoxList = [];
 
-            if (rowsList.length > 0) {
-                const targetIdList = rowsList[0].map((row) => {
-                    return userId === row.user1id ? row.user2id : row.user1id;
+            if (connectionList.length > 0) {
+                const targetIdList = connectionList.map((connection) => {
+                    return userId === connection.user1Id ? connection.user2Id : connection.user1Id;
                 });
 
                 const result = await db.query(
-                    db.genQueryIn(targetIdList.length, queryStrings.read.userList),
+                    db.genQueryIn(targetIdList.length, queryStrings.read.userList, false, 'userid'),
                     targetIdList
                 );
 
                 const targetList = result.rows;
 
-                messageBoxList = await Promise.all(rowsList[0].map(async (row, index) => {
-                    const messageBoxId = row.messageboxid;
+                chatBoxList = await Promise.all(messageBoxList.map(async (messageBox, index) => {
                     // const result = await db.query(
                     //     queryStrings.read.messageList + 'ORDER BY messageid DESC LIMIT 1',
                     //     [messageBoxId]
                     // );
 
-                    const row1 = rowsList[1][index];
+                    const connection = connectionList[index];
                     return {
-                        messageBoxId: messageBoxId,
+                        messageBoxId: messageBox.messageBoxId,
                         target: targetList[index],
                         // lastMessage: (result.rows[0] ? result.rows[0].messagecontent : ''),
-                        connectionState: row1.connectionstate,
-                        connectionType: row1.connectiontype
+                        connectionState: connection.connectionState,
+                        connectionType: connection.connectionType
                     }
                 }));
             }
@@ -57,7 +56,7 @@ class MessageBoxController {
             res.render('messagebox', {
                 renderHeaderPartial: true,
                 user,
-                messageBoxList: messageBoxList
+                chatBoxList: chatBoxList
             });
         } catch (error) {
             console.log(error);

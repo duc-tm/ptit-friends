@@ -4,7 +4,7 @@ module.exports = {
         byId: 'SELECT*FROM users WHERE userId = $1',
         messageBoxList: 'SELECT*FROM messageboxes WHERE user1Id = $1 OR user2Id = $1',
         connectionList: 'SELECT*FROM chatconnections WHERE user1Id = $1 OR user2Id = $1',
-        userList: 'SELECT userid, fname FROM users WHERE userid IN',
+        userList: 'SELECT userid, fname FROM users',
         messageList: 'SELECT messageid, userid, messagecontent, createdat FROM messages WHERE messageboxid = $1',
         randomUserList: 'SELECT*FROM users WHERE userid != $1 AND gender = $2',
         userHobbies: 'SELECT users.userid, hobbies.hobbytype FROM users, usershobby, hobbies ' 

@@ -10,9 +10,11 @@ const userActionContainer = $('.user-action-container');
 const majorMapping = new Map();
 const chosenList = [];
 
-findBtn.addEventListener('click', () => {
+const displayCriteriaForm = () => {
     criteriaForm.classList.remove('hidden');
-});
+}
+
+findBtn.addEventListener('click', displayCriteriaForm);
 
 criteriaHobbiesItem.forEach(item => {
     item.addEventListener('click', () => {
