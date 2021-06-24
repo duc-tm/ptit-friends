@@ -3,6 +3,18 @@ const MAJOR_WEIGHT = Number(process.env.MAJOR_WEIGHT)
 const AGE_WEIGHT = Number(process.env.AGE_WEIGHT);
 
 module.exports = {
+    /* 
+    *formula
+        NumberOfSimilarHobby*HOBBY_WEIGHT - AgeDifference*AGE_WEIGHT + NumberOfSimilarMajor*MAJOR_WEIGHT
+    *PARAMS
+        targetList - array of User object need to calculate matching point
+        hobbyList - array of user's hobby corresponding to targetList
+        preferHobies - prefer hobbies of user
+        preferAge - prefer age of user
+        preferMajors - prefer majors of user
+    *RETURN
+        Array of User object sort by similar point
+    */
     calMatchingPoint(targetList, hobbyList, preferHobies, preferAge, preferMajors) {
 
         const similarPointList = targetList.reduce((total, target) => {
@@ -26,6 +38,9 @@ module.exports = {
             return similarPointList[b.userId] - similarPointList[a.userId];
         })
 
-        return result.slice(0, 10);
+        return result;
+    },
+    getTargetId(userId, payload) {
+        return payload.user1Id === userId ? payload.user2Id : payload.user1Id;
     }
 }

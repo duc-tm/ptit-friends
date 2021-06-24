@@ -1,5 +1,4 @@
-const db = require('../utils/db');
-const queryStrings = require('../utils/db/queryString');
+const messageModel = require('../models/MessageModel');
 
 class MessageController {
 
@@ -9,13 +8,7 @@ class MessageController {
         const messageContent = req.body.message;
 
         try {
-            await db.query(queryStrings.create.message,
-                [
-                    messageBoxId,
-                    req.cookies.userId,
-                    messageContent
-                ]
-            );
+            await messageModel.saveMessage(messageBoxId, messageContent, req.session.user.userId);
             res.status(201).json({ state: true });
         } catch (error) {
             console.log(error);

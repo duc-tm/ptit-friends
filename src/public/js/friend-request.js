@@ -39,7 +39,7 @@ const getTargetInfo = async function () {
 
     const resData = await res.json();
     if (!resData.msg) {
-        const targetInfo = resData.target;
+        const targetInfo = resData.user;
         renderTargetInfo(targetInfo);
     }
 }
@@ -87,7 +87,7 @@ const removeRequest = () => {
 }
 
 const respondFriendRequest = async (responseState) => {
-    const targetId = $('.connect-request__item--active').getAttribute('userid');
+    const senderId = $('.connect-request__item--active').getAttribute('userid');
 
     const res = await fetch('http://localhost:3000/user/respond-friend-request', {
         method: 'POST',
@@ -95,7 +95,7 @@ const respondFriendRequest = async (responseState) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ targetId, responseState })
+        body: JSON.stringify({ senderId, responseState })
     });
 
     const resData = await res.json();

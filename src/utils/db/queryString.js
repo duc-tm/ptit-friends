@@ -6,12 +6,12 @@ module.exports = {
         connectionList: 'SELECT*FROM chatconnections WHERE user1Id = $1 OR user2Id = $1',
         userList: 'SELECT userid, fname FROM users',
         messageList: 'SELECT messageid, userid, messagecontent, createdat FROM messages WHERE messageboxid = $1',
-        randomUserList: 'SELECT*FROM users WHERE userid != $1 AND gender = $2',
+        usersByGender: 'SELECT*FROM users WHERE gender = $1',
         userHobbies: 'SELECT users.userid, hobbies.hobbytype FROM users, usershobby, hobbies ' 
             + 'WHERE users.userid = usershobby.userid '
-            + 'AND usershobby.hobbyid = hobbies.hobbyid '
-            + 'AND users.userid IN',
+            + 'AND usershobby.hobbyid = hobbies.hobbyid',
         hobbyList: 'SELECT hobbytype FROM hobbies',
+        sentFriendRequest: 'SELECT * FROM friendrequests WHERE senderid = $1',
         friendRequestList: 'SELECT users.* FROM friendrequests, users WHERE friendrequests.senderid = users.userid '
             + 'AND friendrequests.requeststate = false '
             + 'AND friendrequests.userid = $1'

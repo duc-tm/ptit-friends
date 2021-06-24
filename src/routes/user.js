@@ -9,7 +9,6 @@ router.post('/register',
 );
 router.post('/login', userController.login);
 router.post('/logout', userMiddleware.isLogedIn, userController.logout);
-router.post('/matching', userMiddleware.isLogedIn, userController.matching);
 router.get('/get-info/:id', userMiddleware.isLogedIn, userController.getUserInfo);
 router.post('/send-friend-request', userMiddleware.isLogedIn, userController.sendFriendRequest);
 router.get('/friend-request', userMiddleware.isLogedIn, userController.getFriendRequest);

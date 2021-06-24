@@ -6,17 +6,13 @@ class SiteController {
 
     // [GET] /
     async displayHomePage(req, res) {
-        const result = await Promise.all([
-            db.query(queryStrings.read.byId, [req.session.user.userId]),
-            db.query(queryStrings.read.hobbyList, [])
-        ]);
+        const result = await db.query(queryStrings.read.hobbyList, []);
 
-        const user = new userModel(result[0].rows[0]);
-        const hobbyList = result[1].rows.map((hobby) => {
+        const hobbyList = result.rows.map((hobby) => {
             return hobby.hobbytype;
         });
 
-        res.render('home', { renderHeaderPartial: true, user, hobbyList })
+        res.render('home', { renderHeaderPartial: true, user: req.session.user, hobbyList })
     }
 
     // [GET] /welcome

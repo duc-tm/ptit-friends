@@ -106,8 +106,9 @@ const showBoxChat = async function () {
             toogleActiveClass(this, boxChatEle);
 
             messageInfoList.forEach((messageInfo) => {
-                const messageContainer = userId === messageInfo.userid ? 'massage-out' : 'massage-in';
-                renderMessage(messageInfo.messagecontent, messageContainer);
+                const messageContainer = userId === messageInfo.userId ? 'massage-out' : 'massage-in';
+                console.log(messageInfo.createdAt)
+                renderMessage(messageInfo.messageContent, messageContainer);
             });
 
             toBottomBox();

@@ -7,7 +7,7 @@
     <div class="message-box__select">
         <h2 class="message-box__header">Tin nhắn</h2>
         <ul class="message-box__list">
-            {{#each chatBoxList}}
+            {{#each userMessageBoxes}}
             <li class="message-box__item" targetId="{{this.target.userid}}" messageBoxId="{{this.messageBoxId}}">
                 <img src="/img/monleo.jpg" alt="" class="massage-in__img">
                 <div class="message-box__item-content">
@@ -15,7 +15,7 @@
                         {{#if this.connectionType}}
                         Đoán xem
                         {{else}}
-                        {{this.target.fname}}
+                        {{this.target.fName}}
                         {{/if}}
                     </h3>
                     <p class="message-box__item-last-message"></p>

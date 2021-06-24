@@ -55,7 +55,7 @@ const submitCriteriaForm = async () => {
     const preferHobbies = preferHobbyEles.map((preferHobbyEle) => preferHobbyEle.getAttribute('value'));
     const preferMajors = preferMajorEles.map((preferMajorEle) => preferMajorEle.getAttribute('value'));
 
-    const res = await fetch('http://localhost:3000/user/matching', {
+    const res = await fetch('http://localhost:3000/matching/rec', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -97,7 +97,7 @@ const getTargetInfo = async function () {
 
     const resData = await res.json();
     if (!resData.msg) {
-        const targetInfo = resData.target;
+        const targetInfo = resData.user;
         renderTargetInfo(targetInfo);
         if (this.classList.contains('chosen')) {
             toggleChooseButton($('.user-action__button--remove'), $('.user-action__button--accept'));

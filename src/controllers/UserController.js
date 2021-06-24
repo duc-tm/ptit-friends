@@ -1,9 +1,8 @@
 const db = require('../utils/db');
 const queryStrings = require('../utils/db/queryString');
 const userModel = require('../models/UserModel');
-const accountModel = require('../models/AccountModel');
 const { hash, compareHash } = require('../utils/bcrypt');
-const userHelper = require('../helpers/userHelper');
+const { createFriendRequest } = require('../models/FriendRequestModel');
 
 class UserController {
 
@@ -36,28 +35,20 @@ class UserController {
 
     // [POST] /user/login
     async login(req, res) {
-        const { username, password } = req.body;
+        const authResult = await userModel.auth(req.body);
 
-        try {
-            const result = await db.query(queryStrings.read.byUserName, [username]);
-
-            if (result.rowCount > 0) {
-                const account = new accountModel(result.rows[0]);
-                const user = new userModel(result.rows[0]);
-                const isMatch = await compareHash(password, account.password);
-
-                if (isMatch) {
-                    req.session.user = { userId: user.userId, fName: user.fName };
-                    res.cookie('userId', user.userId)
-                    return res.status(200).json({ redirectPath: '/' });
-                }
-            }
-
-            res.json({ msg: 'Incorrect username or password!' });
-        } catch (error) {
-            console.log(error);
+        if (authResult.error) {
             return res.status(503).json({ msg: 'Server got some error. Please try again later.' });
         }
+        if (authResult.user) {
+            const user = authResult.user;
+
+            req.session.user = { userId: user.userId, fName: user.fName };
+            res.cookie('userId', user.userId)
+
+            return res.status(200).json({ redirectPath: '/' });
+        }
+        return res.json({ msg: 'Incorrect username or password!' });
     }
 
     // [POST] /user/logout
@@ -69,78 +60,22 @@ class UserController {
         });
     }
 
-    // [POST] /user/matching
-    async matching(req, res) {
-        const { preferHobbies, preferGender, preferAge, preferMajors } = req.body;
-        const userId = req.session.user.userId;
-
-        try {
-            let result = await db.query(queryStrings.read.connectionList, [userId]);
-            const connectedTargetIdList = result.rows.reduce((total, row) => {
-                if (row.connectionstate) {
-                    const connectedTargetId = row.user1id === userId ? row.user2id : row.user1id;
-                    total.push(connectedTargetId);
-                }
-                return total;
-            }, []);
-
-            const countConnection = connectedTargetIdList.length;
-            const queryString = (countConnection > 0 ?
-                db.genQueryIn(countConnection, queryStrings.read.randomUserList + ' AND userid NOT IN', 2)
-                : queryStrings.read.randomUserList
-            );
-
-            result = await db.query(
-                db.genQueryRandom(20, queryString),
-                [userId, preferGender, ...connectedTargetIdList]
-            );
-
-            let targetList = result.rows.map((row) => {
-                return new userModel(row);
-            });
-            const targetIdList = targetList.map((target) => target.userId);
-            let targetHobbyList = {};
-            if (targetIdList.length > 0) {
-                result = await db.query(
-                    db.genQueryIn(targetIdList.length, queryStrings.read.userHobbies),
-                    targetIdList
-                );
-
-                targetHobbyList = result.rows.reduce((total, hobby) => {
-                    const userId = hobby.userid;
-                    if (!total[userId]) total[userId] = new Map();
-                    total[userId].set(hobby.hobbytype, true);
-                    return total;
-                }, {});
-            }
-
-            targetList = userHelper.calMatchingPoint(
-                targetList, targetHobbyList, preferHobbies, preferAge, preferMajors
-            );
-
-            res.status(200).json(targetList);
-        } catch (error) {
-            console.log(error);
-            res.status(503).json({ msg: 'Server got some error. Please try again later.' });
-        }
-    }
-
     // [GET] /user/get-info/:id
     async getUserInfo(req, res) {
-        const { id: targetId } = req.params;
+        const { id: userId } = req.params;
 
         try {
             const results = await Promise.all([
-                db.query(queryStrings.read.byId, [targetId]),
-                db.query(db.genQueryIn(1, queryStrings.read.userHobbies), [targetId])
+                userModel.getUserById(userId),
+                userModel.getUsersHobbies([userId])
             ]);
 
-            const target = new userModel(results[0].rows[0]);
-            target.hobbies = results[1].rows.map((row) => {
-                return row.hobbytype;
+            const user = results[0][0];
+            user.hobbies = results[1].map((hobby) => {
+                return hobby.hobbyType;
             });
 
-            res.status(200).json({ target })
+            res.status(200).json({ user })
         } catch (error) {
             console.log(error);
             res.status(503).json({ msg: 'Server got some error. Please try again later.' });
@@ -154,7 +89,7 @@ class UserController {
 
         try {
             await chosenList.forEach((targetId) => {
-                db.query(queryStrings.create.friendRequest, [targetId, userId, false]);
+                createFriendRequest(userId, targetId);
             });
 
             res.status(201).json({ state: true });
@@ -170,17 +105,9 @@ class UserController {
         const userId = req.session.user.userId;
 
         try {
+            const senderList = await userModel.getFriendRequestList(userId);
 
-            const results = await Promise.all([
-                db.query(queryStrings.read.friendRequestList, [userId]),
-                db.query(queryStrings.read.byId, [userId])
-            ]);
-            const senderList = results[0].rows.map((row) => {
-                return new userModel(row);
-            });
-            const user = new userModel(results[1].rows[0]);
-
-            res.render('friendrequest', { renderHeaderPartial: true, user, senderList });
+            res.render('friendrequest', { renderHeaderPartial: true, user: req.session.user, senderList });
         } catch (error) {
             console.log(error);
             res.status(503).json({ msg: 'Server got some error. Please try again later.' });
@@ -189,19 +116,11 @@ class UserController {
 
     // [POST] /user/respond-friend-request
     async respondFriendRequest(req, res) {
-        const { targetId, responseState } = req.body;
+        const { senderId, responseState } = req.body;
         const userId = req.session.user.userId;
 
         try {
-            await Promise.all([
-                db.query(queryStrings.update.friendRequestState, [true, userId, targetId]),
-                (responseState ?
-                    [
-                        db.query(queryStrings.create.chatConnection, [userId, targetId, true, false]),
-                        db.query(queryStrings.create.messageBox, [userId, targetId])
-                    ]
-                    : true)
-            ]);
+            userModel.respondFriendRequest(userId, senderId, responseState)
 
             res.status(201).json({ state: true });
         } catch (error) {
