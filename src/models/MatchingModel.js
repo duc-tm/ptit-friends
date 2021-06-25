@@ -37,9 +37,9 @@ class Matching {
             return total;
         }, {});
 
-
+        const preferMajorsMap = preferMajors.reduce((total, preferMajor) => total.set(preferMajor, true), new Map());
         const sortedTargetList = calMatchingPoint(
-            targetList, targetHobbiesMap, preferHobbies, preferAge, preferMajors
+            targetList, targetHobbiesMap, preferHobbies, preferAge, preferMajorsMap
         );
 
         return { recTargetList: sortedTargetList.slice(0, 10) };

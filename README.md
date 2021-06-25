@@ -12,9 +12,9 @@
   PORT = 3000
   SALT_LENGTH = 12
   SESSION_SECRET = jrVdb=9gn"y-A'[A'x/=
-  HOBBY_WEIGHT = 1.0
+  HOBBY_WEIGHT = 1.5
   MAJOR_WEIGHT = 1.0
-  AGE_WEIGHT = 0.5
+  AGE_WEIGHT = 0.4
   
  2. Install dependency
   In "package.json"

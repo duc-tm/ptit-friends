@@ -5,13 +5,13 @@ const AGE_WEIGHT = Number(process.env.AGE_WEIGHT);
 module.exports = {
     /* 
     *formula
-        NumberOfSimilarHobby*HOBBY_WEIGHT - AgeDifference*AGE_WEIGHT + NumberOfSimilarMajor*MAJOR_WEIGHT
+        NumberOfSimilarHobby*HOBBY_WEIGHT - AgeDifference*AGE_WEIGHT + (SimilarMajor ? 1 : 0)*MAJOR_WEIGHT
     *PARAMS
         targetList - array of User object need to calculate matching point
-        hobbyList - array of user's hobby corresponding to targetList
+        hobbyList - a Map contain target's hobby corresponding to targetList
         preferHobies - prefer hobbies of user
         preferAge - prefer age of user
-        preferMajors - prefer majors of user
+        preferMajors - prefer majors of user. In form of Map
     *RETURN
         Array of User object sort by similar point
     */
@@ -25,10 +25,7 @@ module.exports = {
                 return targetHobbies.get(hobby) ? total + 1 : total;
             }, 0) * HOBBY_WEIGHT
                 - Math.abs(targetAge - preferAge) * AGE_WEIGHT
-                + preferMajors.reduce((total, major) => {
-                    total += (targetMajor === major ? 1 : 0)
-                    return total
-                }, 0) * MAJOR_WEIGHT;
+                + (preferMajors.get(targetMajor) ? MAJOR_WEIGHT : 0);
 
             total[targetId] = similarPoint
             return total;

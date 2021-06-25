@@ -27,6 +27,7 @@ class User {
         );
         return mapRows(result.rows, result.rowCount, this);
     }
+    
     /* 
     *PARAMS
         username - username submitted by user
