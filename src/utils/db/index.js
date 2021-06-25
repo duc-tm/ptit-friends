@@ -3,6 +3,11 @@ const queryString = require('./queryString');
 const pool = new Pool({
     max: 10
 });
+const types = require('pg').types;
+const timestampOID = 1114;
+types.setTypeParser(timestampOID, function(stringValue) {
+  return stringValue;
+});
 
 module.exports = {
     pool,

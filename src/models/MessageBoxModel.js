@@ -24,30 +24,34 @@ class MessageBox {
         ]);
 
         const messageBoxList = results[0];
-        const connectionList = results[1];
+        if (messageBoxList.length <= 0) return [];
 
-        if (connectionList.length <= 0) return [];
+        const messageBoxMap = messageBoxList.reduce((total, messageBox) => {
+            return total.set(getTargetId(userId, messageBox), messageBox);
+        }, new Map());
 
-        const targetIdList = connectionList.map((connection) => {
-            return getTargetId(userId, connection);
-        });
+        const connectionMap = results[1].reduce((total, connection) => {
+            return total.set(getTargetId(userId, connection), connection);
+        }, new Map());
 
-        const targetList = await userModel.getUserByIds(targetIdList);
+        const targetMap = (await userModel.getUserByIds([...connectionMap.keys()]))
+            .reduce((total, user) => total.set(user.userId, user), new Map());
 
-        const userMessageBoxes = messageBoxList.map((messageBox, index) => {
+        const userMessageBoxes = [];
+
+        messageBoxMap.forEach((messageBox, targetId) => {
             // const result = await db.query(
             //     queryStrings.read.messageList + 'ORDER BY messageid DESC LIMIT 1',
             //     [messageBoxId]
             // );
-
-            const connection = connectionList[index];
-            return {
+            const connection = connectionMap.get(targetId);
+            userMessageBoxes.push({
                 messageBoxId: messageBox.messageBoxId,
-                target: targetList[index],
+                target: targetMap.get(targetId),
                 // lastMessage: (result.rows[0] ? result.rows[0].messagecontent : ''),
                 connectionState: connection.connectionState,
                 connectionType: connection.connectionType
-            }
+            });
         });
 
         return userMessageBoxes;
