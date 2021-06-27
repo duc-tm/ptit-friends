@@ -1,9 +1,16 @@
+const { hash, compareHash } = require('../utils/bcrypt');
+
 const db = require('../utils/db');
 const queryStrings = require('../utils/db/queryString');
 const { mapRows } = require('../utils/db/rowMapper');
-const { hash, compareHash } = require('../utils/bcrypt');
+
+const accountModel = require('./AccountModel');
+const messageBoxModel = require('./MessageBoxModel');
+const connectionModel = require('./ConnectionModel');
+const friendRequestModel = require('./FriendRequestModel');
 
 class User {
+
     static getInstance({ userid, fname, age, gender, major, address }) {
         return {
             userId: userid,
@@ -27,7 +34,7 @@ class User {
         );
         return mapRows(result.rows, result.rowCount, this);
     }
-    
+
     /* 
     *PARAMS
         username - username submitted by user
@@ -42,19 +49,19 @@ class User {
             const result = await db.query(queryStrings.read.byUserName, [username]);
 
             if (result.rowCount > 0) {
-                const { password: savedPassword } = result.rows[0];
+                const account = accountModel.getInstance(result.rows[0]);
                 const user = this.getInstance(result.rows[0]);
-                const isMatch = await compareHash(submitPassword, savedPassword);
+                const isMatch = await compareHash(submitPassword, account.password);
 
-                if (isMatch) {
-                    return { user };
+                if (isMatch && (account.role !== undefined && account.role !== null)) {
+                    return { state: true, user, role: account.role };
                 }
             }
 
-            return false;
+            return { state: false };
         } catch (error) {
             console.log(error);
-            return { error };
+            return { state: false, error };
         }
     }
 
@@ -109,16 +116,22 @@ class User {
     }
 
     static async respondFriendRequest(userId, senderId, responseState) {
-        await Promise.all([
-            db.query(queryStrings.update.friendRequestState, [true, userId, senderId]),
-            (responseState ?
-                [
-                    db.query(queryStrings.create.chatConnection, [userId, senderId, true, false]),
-                    db.query(queryStrings.create.messageBox, [userId, senderId])
-                ]
-                : true
-            )
-        ]);
+        try {
+            await Promise.all([
+                friendRequestModel.changeState(true, userId, senderId),
+                (responseState ?
+                    [
+                        connectionModel.createConnections(userId, senderId, true, false),
+                        messageBoxModel.createMessageBox(userId, senderId)
+                    ]
+                    : true
+                )
+            ]);
+
+        } catch (error) {
+            console.log(error);
+
+        }
     }
 }
 

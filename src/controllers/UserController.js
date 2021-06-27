@@ -1,8 +1,12 @@
 const db = require('../utils/db');
 const queryStrings = require('../utils/db/queryString');
+
 const userModel = require('../models/UserModel');
-const { hash, compareHash } = require('../utils/bcrypt');
+const accountModel = require('../models/AccountModel');
+const { ADMIN, NORMAL_USER } = accountModel.ROLE_CONSTANT;
 const { createFriendRequest } = require('../models/FriendRequestModel');
+
+const { hash, compareHash } = require('../utils/bcrypt');
 
 class UserController {
 
@@ -37,17 +41,24 @@ class UserController {
     async login(req, res) {
         const authResult = await userModel.auth(req.body);
 
-        if (authResult.error) {
-            return res.status(503).json({ msg: 'Server got some error. Please try again later.' });
-        }
-        if (authResult.user) {
-            const user = authResult.user;
+        // if (authResult.error) {
+        //     return res.status(503).json({ msg: 'Server got some error. Please try again later.' });
+        // }
 
-            req.session.user = { userId: user.userId, fName: user.fName };
+        if (authResult.state) {
+            const { user, role } = authResult;
+
+            req.session.user = { userId: user.userId, fName: user.fName, role: role };
             res.cookie('userId', user.userId)
 
-            return res.status(200).json({ redirectPath: '/' });
+            switch (role) {
+                case NORMAL_USER:
+                    return res.status(200).json({ redirectPath: '/' });
+                case ADMIN:
+                    return res.status(200).json({ redirectPath: '/admin' });
+            }
         }
+
         return res.json({ msg: 'Incorrect username or password!' });
     }
 

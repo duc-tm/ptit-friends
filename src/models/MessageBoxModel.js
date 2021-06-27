@@ -2,9 +2,8 @@ const db = require('../utils/db');
 const queryStrings = require('../utils/db/queryString');
 const { mapRows } = require('../utils/db/rowMapper');
 
-const connectionModel = require('../models/ConnectionModel');
-const messageModel = require('../models/MessageModel');
-const userModel = require('../models/UserModel');
+const connectionModel = require('./ConnectionModel');
+const messageModel = require('./MessageModel');
 
 const { getTargetId } = require('../helpers/userHelper');
 
@@ -17,7 +16,17 @@ class MessageBox {
         }
     }
 
-    static async getUserMessageBoxes(userId) {
+    static async createMessageBox(userId, senderId) {
+        try {
+            await db.query(queryStrings.create.messageBox, [userId, senderId]);
+            return true;
+        } catch (error) {
+            throw error
+        }
+        
+    }
+
+    static async getUserMessageBoxes(userId, userModel) {
         const results = await Promise.all([
             this.getMessageBoxList(userId),
             connectionModel.getUserConnections(userId)

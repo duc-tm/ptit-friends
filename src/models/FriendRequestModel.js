@@ -21,6 +21,15 @@ class FriendRequest {
         }
     }
 
+    static async changeState(state, userId, senderId) {
+        try {
+            await db.query(queryStrings.update.friendRequestState, [state, userId, senderId])
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async getUserSentRequest(userId) {
         const result = await db.query(queryStrings.read.sentFriendRequest, [userId]);
         return mapRows(result.rows, result.rowCount, this);

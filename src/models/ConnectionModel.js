@@ -16,6 +16,15 @@ class Connection {
         const result = await db.query(queryStrings.read.connectionList, [userId]);
         return mapRows(result.rows, result.rowCount, this);
     }
+
+    static async createConnections(user1Id, user2Id, connectionState, connectionType) {
+        try {
+            await db.query(queryStrings.create.chatConnection, [user1Id, user2Id, connectionState, connectionType]);
+            return true;
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 module.exports = Connection;
