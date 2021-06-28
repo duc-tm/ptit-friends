@@ -31,9 +31,11 @@ const sendMessage = async () => {
 
 const receiveMessage = ({ message, senderId }) => {
     const imgLink = $('.massage-in__img').src;
-    // updateLastMessage(message, senderId);
-    renderMessage(message, 'massage-in', imgLink);
-    toBottomBox();
+    if($('.message-box__item--active').getAttribute('targetid') === senderId) {
+        // updateLastMessage(message, senderId);
+        renderMessage(message, 'massage-in', imgLink);
+        toBottomBox();
+    }
 }
 
 // const updateLastMessage = (message, senderId) => {
@@ -107,7 +109,6 @@ const showBoxChat = async function () {
 
             messageInfoList.forEach((messageInfo) => {
                 const messageContainer = userId === messageInfo.userId ? 'massage-out' : 'massage-in';
-                console.log(messageInfo.createdAt)
                 renderMessage(messageInfo.messageContent, messageContainer);
             });
 

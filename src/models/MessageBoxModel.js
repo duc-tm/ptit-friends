@@ -4,6 +4,7 @@ const { mapRows } = require('../utils/db/rowMapper');
 
 const connectionModel = require('./ConnectionModel');
 const messageModel = require('./MessageModel');
+const userModel = require('./UserModel');
 
 const { getTargetId } = require('../helpers/userHelper');
 
@@ -26,10 +27,10 @@ class MessageBox {
         
     }
 
-    static async getUserMessageBoxes(userId, userModel) {
+    static async getUserMessageBoxes(userId) {
         const results = await Promise.all([
             this.getMessageBoxList(userId),
-            connectionModel.getUserConnections(userId)
+            // connectionModel.getUserConnections(userId)
         ]);
 
         const messageBoxList = results[0];
@@ -39,11 +40,11 @@ class MessageBox {
             return total.set(getTargetId(userId, messageBox), messageBox);
         }, new Map());
 
-        const connectionMap = results[1].reduce((total, connection) => {
-            return total.set(getTargetId(userId, connection), connection);
-        }, new Map());
+        // const connectionMap = results[1].reduce((total, connection) => {
+        //     return total.set(getTargetId(userId, connection), connection);
+        // }, new Map());
 
-        const targetMap = (await userModel.getUserByIds([...connectionMap.keys()]))
+        const targetMap = (await userModel.getUserByIds([...messageBoxMap.keys()]))
             .reduce((total, user) => total.set(user.userId, user), new Map());
 
         const userMessageBoxes = [];
@@ -53,13 +54,13 @@ class MessageBox {
             //     queryStrings.read.messageList + 'ORDER BY messageid DESC LIMIT 1',
             //     [messageBoxId]
             // );
-            const connection = connectionMap.get(targetId);
+            // const connection = connectionMap.get(targetId);
             userMessageBoxes.push({
                 messageBoxId: messageBox.messageBoxId,
                 target: targetMap.get(targetId),
                 // lastMessage: (result.rows[0] ? result.rows[0].messagecontent : ''),
-                connectionState: connection.connectionState,
-                connectionType: connection.connectionType
+                // connectionState: connection.connectionState,
+                // connectionType: connection.connectionType
             });
         });
 

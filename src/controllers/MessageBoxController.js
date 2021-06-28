@@ -1,5 +1,4 @@
 const messageBoxModel = require('../models/MessageBoxModel');
-const userModel = require('../models/UserModel');
 
 class MessageBoxController {
 
@@ -8,7 +7,7 @@ class MessageBoxController {
         const userId = req.session.user.userId;
 
         try {
-            const userMessageBoxes = await messageBoxModel.getUserMessageBoxes(userId, userModel);
+            const userMessageBoxes = await messageBoxModel.getUserMessageBoxes(userId);
 
             res.render('messagebox', {
                 renderHeaderPartial: true,

@@ -3,8 +3,11 @@ const queryStrings = require('../utils/db/queryString');
 
 const userModel = require('../models/UserModel');
 const accountModel = require('../models/AccountModel');
+const friendRequestModel = require('../models/FriendRequestModel');
+const connectionModel = require('../models/ConnectionModel');
+const messageBoxModel = require('../models/MessageBoxModel');
+
 const { ADMIN, NORMAL_USER } = accountModel.ROLE_CONSTANT;
-const { createFriendRequest } = require('../models/FriendRequestModel');
 
 const { hash, compareHash } = require('../utils/bcrypt');
 
@@ -100,7 +103,7 @@ class UserController {
 
         try {
             await chosenList.forEach((targetId) => {
-                createFriendRequest(userId, targetId);
+                friendRequestModel.createFriendRequest(userId, targetId);
             });
 
             res.status(201).json({ state: true });
@@ -131,7 +134,16 @@ class UserController {
         const userId = req.session.user.userId;
 
         try {
-            userModel.respondFriendRequest(userId, senderId, responseState)
+            await Promise.all([
+                friendRequestModel.changeState(true, userId, senderId),
+                (responseState ?
+                    [
+                        connectionModel.createConnections(userId, senderId, true, false),
+                        messageBoxModel.createMessageBox(userId, senderId)
+                    ]
+                    : true
+                )
+            ]);
 
             res.status(201).json({ state: true });
         } catch (error) {

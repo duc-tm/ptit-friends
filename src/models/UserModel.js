@@ -5,9 +5,6 @@ const queryStrings = require('../utils/db/queryString');
 const { mapRows } = require('../utils/db/rowMapper');
 
 const accountModel = require('./AccountModel');
-const messageBoxModel = require('./MessageBoxModel');
-const connectionModel = require('./ConnectionModel');
-const friendRequestModel = require('./FriendRequestModel');
 
 class User {
 
@@ -113,25 +110,6 @@ class User {
     static async getFriendRequestList(userId) {
         const result = await db.query(queryStrings.read.friendRequestList, [userId]);
         return mapRows(result.rows, result.rowCount, this);
-    }
-
-    static async respondFriendRequest(userId, senderId, responseState) {
-        try {
-            await Promise.all([
-                friendRequestModel.changeState(true, userId, senderId),
-                (responseState ?
-                    [
-                        connectionModel.createConnections(userId, senderId, true, false),
-                        messageBoxModel.createMessageBox(userId, senderId)
-                    ]
-                    : true
-                )
-            ]);
-
-        } catch (error) {
-            console.log(error);
-
-        }
     }
 }
 
