@@ -7,7 +7,7 @@ create table users (
 	address text,
 	username varchar(255),
 	password text,
-	userRole boolean,
+	userRole boolean default false,
 	email varchar(350)
 );
 
