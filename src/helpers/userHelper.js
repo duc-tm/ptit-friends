@@ -34,7 +34,7 @@ module.exports = {
         const result = targetList.sort((a, b) => {
             return similarPointList[b.userId] - similarPointList[a.userId];
         })
-
+        console.log(similarPointList)
         return result;
     },
     getTargetId(userId, payload) {

@@ -38,6 +38,7 @@ module.exports = {
         query string with IN clause
     */
     genQueryIn: (paramsLength, queryString, connectClause, notIn, fieldName, startIndex = 0) => {
+        if(paramsLength <= 0) return queryString;
         queryString += ` ${connectClause} ${fieldName} ${notIn ? 'NOT IN(' : 'IN('}`;
         let i = 1;
         for (i; i < paramsLength; i++) {

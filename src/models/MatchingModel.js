@@ -5,27 +5,8 @@ const { calMatchingPoint, getTargetId } = require('../helpers/userHelper');
 
 class Matching {
     static async recommandMatching(userId, { preferHobbies, preferGender, preferAge, preferMajors }) {
-        const [sentRequests, userConnections] = await Promise.all([
-            friendRequestModel.getUserSentRequest(userId),
-            connectionModel.getUserConnections(userId)
-        ]);
-        
-        const exceptUserIds = sentRequests.reduce((total, sentRequest) => {
-            return sentRequest.requestState ? total : total.set(sentRequest.userId, true);
-        }, new Map());
 
-        userConnections.reduce((total, userConnection) => {
-            if (userConnection.connectionState) {
-                const connectedTargetId = getTargetId(userId, userConnection);
-                total.set(connectedTargetId, true);
-            }
-            return total;
-        }, exceptUserIds);
-
-        const targetList = await userModel.getRandomUsers(
-            20, preferGender,
-            [...exceptUserIds.keys(), userId]
-        );
+        const targetList = await userModel.getRandomUsers(20, preferGender, [userId]);
         const targetIdList = targetList.map((target) => target.userId);
 
         const targetHobbiesList = await userModel.getUsersHobbies(targetIdList);
@@ -41,7 +22,7 @@ class Matching {
         const sortedTargetList = calMatchingPoint(
             targetList, targetHobbiesMap, preferHobbies, preferAge, preferMajorsMap
         );
-
+        console.log(sortedTargetList)
         return { recTargetList: sortedTargetList.slice(0, 10) };
     }
 }
